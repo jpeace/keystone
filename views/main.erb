@@ -2,8 +2,15 @@
   <head>
     <%= js_includes %>
     <script type="text/javascript" src="js/user_details.js"></script>
+    <script type="text/javascript" src="js/require.js"></script>
+    <script type="text/javascript" src="js/libA.js"></script>
+    <script type="text/javascript" src="js/libB.js"></script>
   </head>
   <body>
+    <script>
+      // var libA = require('libA');
+      // libA.doSomething();
+    </script>
     <div class="view" data-presenter="UserDetails">
       <div data-property="name">Original</div>
       <input data-property="age" />
