@@ -37,6 +37,17 @@ class ReplaceQs
 end
 replace_qs = ReplaceQs.new
 
+class ReplaceCaps
+  include MusicOne::AssetTool
+  def should_run?
+    true
+  end
+  def transform
+    @original.content.gsub(/[A-Z]/, '-')
+  end
+end
+replace_caps = ReplaceCaps.new
+
 class DoubleString
   include MusicOne::AssetTool
   def should_run?
@@ -50,6 +61,16 @@ class DoubleString
 end
 double_string = DoubleString.new
 
+class ShortenString
+  include MusicOne::AssetTool
+  def should_run?
+    true
+  end
+  def transform
+    @original.content[1,100]
+  end
+end
+
 asset1 = MusicOne::Asset.new do |a|
           a.name = "asset1"
           a.type = :boring
@@ -60,7 +81,6 @@ asset2 = MusicOne::Asset.new do |a|
           a.type = :too_short
           a.content = "Quite doubled"
         end
-assets = [asset1,asset2]
 
 describe "classes mixing in the AssetTool module" do
   it "return an asset when run" do
@@ -87,12 +107,51 @@ describe "classes mixing in the AssetTool module" do
 end
 
 describe MusicOne::AssetCompiler do
-  subject do
-    toolchain = [ReplaceQs]
-    described_class.new(toolchain, assets)
+  context "with a single element toolchain" do
+    subject do
+      toolchain = [ReplaceQs]
+      described_class.new(toolchain, [asset1, asset2])
+    end
+
+    it "compiles assets" do
+      subject.compile!
+      subject['asset1'].content.should eq 'How *uick is Sha*?'
+      subject['asset2'].content.should eq '*uite doubled'
+    end
   end
 
-  it "compiles assets" do
-    subject.compile
+  context "with a multiple element toolchain" do
+    subject do
+      toolchain = [ReplaceCaps, ReplaceQs]
+      described_class.new(toolchain, [asset1, asset2])
+    end
+
+    it "compiles assets" do
+      subject.compile!
+      subject['asset1'].content.should eq '-ow -uick is -ha*?'
+      subject['asset2'].content.should eq '-uite doubled'
+    end
+  end
+
+  it "runs the toolchain using the order given" do
+    c1 = described_class.new([ReplaceQs, ReplaceCaps], [asset1])
+    c2 = described_class.new([ReplaceCaps, ReplaceQs], [asset1])
+    
+    c1.compile! && c2.compile!
+    
+    c1['asset1'].content.should eq '-ow *uick is -ha*?'
+    c2['asset1'].content.should eq '-ow -uick is -ha*?'
+  end
+
+  it "only compiles once" do
+    c = described_class.new([ShortenString], [asset2])
+    c.compile!
+    c.compile!
+    c['asset2'].content.should eq 'uite doubled'
+  end
+
+  it "builds an asset package" do
+    c = described_class.new([ReplaceCaps, ShortenString], [asset1, asset2])
+    c.build!.should eq "ow -uick is -haq?\nuite doubled"
   end
 end

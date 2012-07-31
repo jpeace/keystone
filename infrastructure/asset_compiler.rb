@@ -31,17 +31,35 @@ module MusicOne
     attr_accessor :assets
 
     def initialize(toolchain, assets=[])
+      @compiled = false
+      @package = nil
+
       @toolchain = toolchain.map {|t| t.new}
       @assets = assets
     end
 
-    def compile
-      each_script do |script|
-        @toolchain.each {|t| t.transform!(script)}
-      end
+    def [](asset_name)
+      @assets.select {|a| a.name == asset_name}.first
     end
 
-    def each_script
+    def compiled?
+      @compiled
+    end
+
+    def compile!
+      return if compiled?
+      @assets = @assets.map do |a|
+        @toolchain.reduce(a) {|asset,tool| tool.run!(asset)}
+      end
+      @compiled = true
+    end
+
+    def build!
+      if @package.nil?
+        compile!
+        @package = @assets.map{|a| a.content}.join("\n")
+      end
+      @package
     end
   end
 
