@@ -81,25 +81,30 @@ asset2 = MusicOne::Asset.new do |a|
           a.type = :too_short
           a.content = "Quite doubled"
         end
+asset3 = MusicOne::Asset.new do |a|
+          a.name = "asset3"
+          a.type = :boring
+          a.content = "Not quick enough"
+        end
 
 describe "classes mixing in the AssetTool module" do
   it "return an asset when run" do
-    replace_qs.run!(asset1).should be_is_a(MusicOne::Asset)
+    replace_qs.run(asset1).should be_is_a(MusicOne::Asset)
   end
     
   context "when defining should_run?" do
     it "can return false to be skipped" do
-      double_string.run!(asset1).content.should eq 'How Quick is Shaq?'
+      double_string.run(asset1).content.should eq 'How Quick is Shaq?'
     end
   end
 
   context "when defining transform" do
     it "can return a string to transform contents" do
-      replace_qs.run!(asset1).content.should eq 'How *uick is Sha*?'
+      replace_qs.run(asset1).content.should eq 'How *uick is Sha*?'
     end
 
     it "can return an array to transform type and contents" do
-      asset = double_string.run!(asset2)
+      asset = double_string.run(asset2)
       asset.type.should eq :doubled
       asset.content.should eq 'QQuuiittee  ddoouubblleedd'
     end
@@ -150,8 +155,40 @@ describe MusicOne::AssetCompiler do
     c['asset2'].content.should eq 'uite doubled'
   end
 
-  it "builds an asset package" do
-    c = described_class.new([ReplaceCaps, ShortenString], [asset1, asset2])
-    c.build!.should eq "ow -uick is -haq?\nuite doubled"
+  context "when building a package" do
+    it "chooses the type of the first asset when determining package type" do
+      c = described_class.new([], [asset1, asset3])
+      c.package_type.should eq :boring
+
+      c = described_class.new([], [asset2, asset3])
+      c.package_type.should eq :too_short
+    end
+
+    it "uses the package name given" do
+      c = described_class.new([],[],:package_name => 'new_package')
+      c.package_name.should eq 'new_package'
+    end
+
+    it "uses the package type for package name if no name given" do
+      c = described_class.new([],[asset1])
+      c.package_name.should eq 'boring'
+    end
+
+    it "builds an asset package" do
+      c = described_class.new([ReplaceCaps, ShortenString], [asset1, asset2])
+      package = c.build!
+
+      package.name.should eq 'boring'
+      package.type.should eq :boring
+      package.content.should eq "ow -uick is -haq?\nuite doubled"
+    end
+
+    it "uses post-build steps if specified" do
+      c = described_class.new([ReplaceCaps], [asset1, asset3], :post_build => [ReplaceQs])
+      package = c.build!
+
+      package.type.should eq :boring
+      package.content.should eq "-ow -uick is -ha*?\n-ot *uick enough"
+    end
   end
 end
