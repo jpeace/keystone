@@ -1,6 +1,6 @@
 asset 'titan.js' do |a|
   a.paths 'views/coffee', 'public/js'
-  a.toolchain :cofeescript, :closure, :require
+  a.toolchain :coffeescript, :closure, :require
 end
 
 asset 'titan.css' do |a|
