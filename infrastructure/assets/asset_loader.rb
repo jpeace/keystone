@@ -26,29 +26,62 @@ module MusicOne
         end
       end
 
-      def initialize
+      def initialize(asset_path)
+        @asset_path = asset_path
         @assets = []
       end
 
-      def scan!(path)
-        scan_path(path)
+      def assets(name_or_type=nil)
+        return @assets if name_or_type.nil?
+
+        if name_or_type.is_a? Symbol
+          return @assets.select {|a| a.type == name_or_type}
+        elsif name_or_type.is_a? String
+          return @assets.select {|a| a.name == name_or_type}
+        end
+
+        return nil
+      end
+
+      def asset(path_and_name)
+        path = ''
+        name = path_and_name
+        slash = path_and_name.rindex('/')
+        unless slash.nil?
+          path = path_and_name[0,slash]
+          name = path_and_name[slash+1..-1]
+        end
+
+        return @assets.find{ |a| a.path == path && a.name == name }
+      end
+
+      def scan!(folder)
+        scan_folder(folder)
       end
 
       private
 
-      def scan_path(path)
-        Dir.foreach(path) do |file|
+      def scan_folder(folder)
+        full_path = "#{@asset_path}/#{folder}"
+
+        Dir.foreach(full_path) do |file|
           next if ['.', '..'].include?(file)
 
-          full_path = "#{path}/#{file}"
-          if File.directory?(full_path)
-            scan_path(full_path)
+          file_path = "#{full_path}/#{file}"
+          if File.directory?(file_path)
+            scan_folder("#{folder}/#{file}")
           else
-            last_slash = full_path.rindex('/')
-            path = full_path[0,last_slash]
-            filename = full_path[last_slash, -1]
-            puts path
-            puts filename
+            filename = file_path[(file_path.rindex('/')+1)..-1]
+            @assets << Asset.new do |a|
+              a.name = AssetLoader.name_from_filename(filename)
+              if folder.include? '/'
+                a.path = folder[(folder.index('/') + 1)..-1]
+              else
+                a.path = ''
+              end
+              a.type = AssetLoader.type_from_filename(filename)
+              a.content = File.read(file_path)
+            end
           end
         end
       end

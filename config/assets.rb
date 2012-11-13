@@ -1,3 +1,5 @@
+asset_path "#{File.dirname(__FILE__)}/../assets"
+
 asset 'titan.js' do |a|
   a.paths 'views/coffee', 'public/js'
   a.toolchain :coffeescript, :closure, :require

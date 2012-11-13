@@ -1,9 +1,7 @@
-def full_path(folder)
-  "#{File.dirname(__FILE__)}/../../environment/#{folder}"
-end
-
 describe MusicOne::Assets::AssetLoader do
+  
   _cut = described_class
+  subject { described_class.new("#{File.dirname(__FILE__)}/../../environment/assets") }
 
   context "when determining content types from files" do
     it "recognizes coffeescript files" do
@@ -41,24 +39,30 @@ describe MusicOne::Assets::AssetLoader do
 
   context "when scanning folders" do
     it "finds all assets" do
-      subject.scan!(full_path('css'))
+      subject.scan!('css')
       subject.assets.should have_exactly(3).items
     end
 
     it "can pull assets by type" do
-      subject.scan!(full_path('css'))
+      subject.scan!('css')
       subject.assets(:css).should have_exactly(2).items
       subject.assets(:unknown).should have_exactly(1).items
     end
 
     it "can pull assets by name" do
-      subject.asset('style1').should be_is_a(MusicOne::Assets::Asset)
+      subject.scan!('css')
+      subject.assets('style1').first.should be_is_a(MusicOne::Assets::Asset)
+    end
+
+    it "can pull a single asset by name and path" do
+      subject.scan!('js')
+      subject.asset('lib1/js2').should be_is_a(MusicOne::Assets::Asset)
     end
 
     it "correctly reads assets" do
-      subject.scan!(full_path('css'))
+      subject.scan!('css')
 
-      readme_file = subject.assets(:unknown).first
+      readme_file = subject.asset('readme')
       readme_file.should be_is_a(MusicOne::Assets::Asset)
       readme_file.name.should eq 'readme'
       readme_file.path.should eq ''
@@ -66,7 +70,7 @@ describe MusicOne::Assets::AssetLoader do
     end
 
     it "scans subfolders" do
-      subject.scan!(full_path('js'))
+      subject.scan!('js')
 
       subject.assets.should have_exactly(4).items
       
