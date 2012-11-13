@@ -3,7 +3,7 @@ describe "classes mixing in the AssetTool module" do
   include TestObjects::Assets
 
   it "return an asset when run" do
-    replace_qs.run(asset1).should be_is_a(MusicOne::Assets::Asset)
+    replace_qs.run(asset1).should be_is_a(Keystone::Asset)
   end
     
   context "when defining should_run?" do

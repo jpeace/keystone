@@ -1,7 +1,7 @@
-describe MusicOne::Assets::AssetLoader do
+describe Keystone::AssetLoader do
   
   _cut = described_class
-  subject { described_class.new("#{File.dirname(__FILE__)}/../../environment/assets") }
+  subject { described_class.new("#{File.dirname(__FILE__)}/../environment/assets") }
 
   context "when determining content types from files" do
     it "recognizes coffeescript files" do
@@ -51,19 +51,19 @@ describe MusicOne::Assets::AssetLoader do
 
     it "can pull assets by name" do
       subject.scan!('css')
-      subject.assets('style1').first.should be_is_a(MusicOne::Assets::Asset)
+      subject.assets('style1').first.should be_is_a(Keystone::Asset)
     end
 
     it "can pull a single asset by name and path" do
       subject.scan!('js')
-      subject.asset('lib1/js2').should be_is_a(MusicOne::Assets::Asset)
+      subject.asset('lib1/js2').should be_is_a(Keystone::Asset)
     end
 
     it "correctly reads assets" do
       subject.scan!('css')
 
       readme_file = subject.asset('readme')
-      readme_file.should be_is_a(MusicOne::Assets::Asset)
+      readme_file.should be_is_a(Keystone::Asset)
       readme_file.name.should eq 'readme'
       readme_file.path.should eq ''
       readme_file.content.should eq 'Read Me!!!'

@@ -2,7 +2,7 @@ module TestObjects
 
   module AssetTools
     class ReplaceQs
-      include MusicOne::Assets::AssetTool
+      include Keystone::AssetTool
       def should_run?
         true
       end
@@ -12,7 +12,7 @@ module TestObjects
     end
 
     class ReplaceCaps
-      include MusicOne::Assets::AssetTool
+      include Keystone::AssetTool
       def should_run?
         true
       end
@@ -22,7 +22,7 @@ module TestObjects
     end
 
     class DoubleString
-      include MusicOne::Assets::AssetTool
+      include Keystone::AssetTool
       def should_run?
         @original.type == :too_short
       end
@@ -34,7 +34,7 @@ module TestObjects
     end
 
     class ShortenString
-      include MusicOne::Assets::AssetTool
+      include Keystone::AssetTool
       def should_run?
         true
       end
@@ -58,7 +58,7 @@ module TestObjects
 
   module Assets
     def asset1
-      MusicOne::Assets::Asset.new do |a|
+      Keystone::Asset.new do |a|
         a.name = "asset1"
         a.type = :boring
         a.content = "How Quick is Shaq?"
@@ -66,7 +66,7 @@ module TestObjects
     end
 
     def asset2
-      MusicOne::Assets::Asset.new do |a|
+      Keystone::Asset.new do |a|
         a.name = "asset2"
         a.type = :too_short
         a.content = "Quite doubled"
@@ -74,7 +74,7 @@ module TestObjects
     end
 
     def asset3
-      MusicOne::Assets::Asset.new do |a|
+      Keystone::Asset.new do |a|
         a.name = "asset3"
         a.type = :boring
         a.content = "Not quick enough"

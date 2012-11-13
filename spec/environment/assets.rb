@@ -1,4 +1,4 @@
-asset_path "#{File.dirname(__FILE__)}/../assets"
+asset_path "#{File.dirname(__FILE__)}"
 
 asset 'titan.js' do |a|
   a.paths 'views/coffee', 'public/js'

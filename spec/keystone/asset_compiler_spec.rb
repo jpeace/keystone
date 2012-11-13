@@ -1,4 +1,4 @@
-describe MusicOne::Assets::AssetCompiler do
+describe Keystone::AssetCompiler do
   include TestObjects::Assets
 
   context "with a single element toolchain" do
