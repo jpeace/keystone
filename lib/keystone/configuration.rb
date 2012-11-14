@@ -3,6 +3,9 @@ module Keystone
     attr_accessor :asset_path
     attr_reader :tool_modules, :assets
 
+    class << self
+    end
+    
     def initialize
       @tool_modules = []
       @assets = []

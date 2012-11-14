@@ -1,4 +1,6 @@
 describe Keystone::Dsl::PipelineExpression do
+  subject { described_class.new(Keystone::PipelineConfiguration.new) }
+  
   context "when setting the asset path" do
     it "correctly sets the path" do
       subject.assets_are_in asset_path

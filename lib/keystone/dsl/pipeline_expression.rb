@@ -3,8 +3,8 @@ module Keystone
     class PipelineExpression
       attr_reader :config
 
-      def initialize
-        @config = Keystone::PipelineConfiguration.new
+      def initialize(config)
+        @config = config
         @config.add_tool_module(Keystone::AssetTools)
       end
 
@@ -18,7 +18,7 @@ module Keystone
       end
 
       def asset
-        expr = AssetExpression.new(:tool_modules => @config.tool_modules)
+        expr = AssetExpression.new(Keystone::AssetConfiguration.new, :tool_modules => @config.tool_modules)
         yield expr if block_given?
         @config.add_asset_config(expr.config)
       end

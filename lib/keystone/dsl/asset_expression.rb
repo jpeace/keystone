@@ -3,8 +3,8 @@ module Keystone
     class AssetExpression
       attr_reader :config
 
-      def initialize(settings={})
-        @config = Keystone::AssetConfiguration.new
+      def initialize(config, settings={})
+        @config = config
         @tool_modules = settings[:tool_modules] || []
       end
 
