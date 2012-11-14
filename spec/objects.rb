@@ -1,3 +1,7 @@
+def asset_path
+  "#{File.dirname(__FILE__)}../../environment/assets"
+end
+
 module TestObjects
 
   module AssetTools
