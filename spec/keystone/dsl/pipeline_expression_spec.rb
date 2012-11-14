@@ -1,6 +1,6 @@
 describe Keystone::Dsl::PipelineExpression do
   subject { described_class.new(Keystone::PipelineConfiguration.new) }
-  
+
   context "when setting the asset path" do
     it "correctly sets the path" do
       subject.assets_are_in asset_path
@@ -24,9 +24,10 @@ describe Keystone::Dsl::PipelineExpression do
   end
 
   it "allows for asset configuration" do
-    subject.asset do |a|
+    subject.asset 'asset' do |a|
       a.should be_a(Keystone::Dsl::AssetExpression)
     end
     subject.config.assets.should have_exactly(1).items
+    subject.config.assets.first.name.should eq 'asset'
   end
 end

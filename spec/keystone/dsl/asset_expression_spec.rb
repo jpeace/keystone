@@ -1,12 +1,16 @@
 describe Keystone::Dsl::AssetExpression do
-  subject { described_class.new(Keystone::AssetConfiguration.new, :tool_modules => [TestObjects::AssetTools]) }
+  subject { 
+    described_class.new(Keystone::AssetConfiguration.new('asset'), 
+      :tool_modules => [TestObjects::AssetTools],
+      :asset_path => asset_path) 
+  }
 
   context "when setting scan paths" do
     it "correctly sets the paths" do
-      subject.scan "#{asset_path}/css", "#{asset_path}/js"
+      subject.scan "css", "js"
       
-      subject.config.scan_paths.should include("#{asset_path}/css")
-      subject.config.scan_paths.should include("#{asset_path}/js")
+      subject.config.scan_paths.should include("css")
+      subject.config.scan_paths.should include("js")
     end
 
     it "throws an exception if any of the paths do not exist" do

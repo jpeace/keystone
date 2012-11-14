@@ -4,11 +4,17 @@ module Keystone
     attr_reader :tool_modules, :assets
 
     class << self
+      def from_file(path)
+        self.new(File.read(path))
+      end
     end
-    
-    def initialize
+
+    def initialize(script='')
       @tool_modules = []
       @assets = []
+
+      dsl = Keystone::Dsl::PipelineExpression.new(self)
+      dsl.instance_eval(script)
     end
 
     def add_tool_module(mod)
@@ -21,9 +27,10 @@ module Keystone
   end
 
   class AssetConfiguration
-    attr_reader :scan_paths, :tools, :post_build_steps
+    attr_reader :name, :scan_paths, :tools, :post_build_steps
 
-    def initialize
+    def initialize(name)
+      @name = name
       @scan_paths = []
       @tools = []
       @post_build_steps = []

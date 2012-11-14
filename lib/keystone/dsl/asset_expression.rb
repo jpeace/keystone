@@ -6,11 +6,12 @@ module Keystone
       def initialize(config, settings={})
         @config = config
         @tool_modules = settings[:tool_modules] || []
+        @asset_path = settings[:asset_path] || ''
       end
 
       def scan(*paths)
         paths.each do |path|
-          raise Keystone::ConfigurationError.new("Bad scan path: #{path}") unless File.directory?(path)
+          raise Keystone::ConfigurationError.new("Bad scan path: #{path}") unless File.directory?("#{asset_path}/#{path}")
           @config.add_scan_path(path)
         end
       end

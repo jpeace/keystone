@@ -1,4 +1,3 @@
-module Keystone
-  module AssetTools
-  end
+%w(coffeescript sassy closure require).each do |tool|
+  require "keystone/asset_tools/#{tool}"
 end
