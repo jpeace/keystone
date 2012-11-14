@@ -1,6 +1,6 @@
 module Keystone
   class AssetCompiler
-    attr_accessor :assets
+    attr_reader :package_name, :assets, :toolchain, :post_build
 
     def initialize(toolchain, assets=[], options={})
       @compiled = false

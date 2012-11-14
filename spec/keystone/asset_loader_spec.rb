@@ -89,5 +89,12 @@ describe Keystone::AssetLoader do
       support.content.should eq 'var support;'
       support.path.should eq 'lib1/support'
     end
+
+    it "scans multiple folders" do
+      subject.scan!('css')
+      subject.scan!('js')
+
+      subject.assets.should have_exactly(7).items
+    end
   end
 end

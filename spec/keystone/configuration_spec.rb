@@ -18,4 +18,20 @@ describe Keystone::PipelineConfiguration do
     css_asset.scan_paths.should include('scss')
     css_asset.tools.should include(Keystone::AssetTools::Sassy)
   end
+
+  it "can be used to build a pipeline" do
+    config = described_class.from_file("#{File.dirname(__FILE__)}/../environment/assets.rb")
+    pipeline = Keystone.build_pipeline(config)
+
+    pipeline.compilers.should have_exactly(2).items
+
+    js_compiler = pipeline.compiler('titan.js')
+    js_compiler.assets.should have_exactly(5).items
+    js_compiler.toolchain.should have_exactly(2).items
+    js_compiler.post_build.should have_exactly(1).items
+
+    css_compiler = pipeline.compiler('titan.css')
+    css_compiler.assets.should have_exactly(4).items
+    css_compiler.toolchain.should have_exactly(1).items
+  end
 end
