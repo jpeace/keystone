@@ -1,5 +1,5 @@
 describe Keystone::Dsl::AssetExpression do
-  subject { described_class.new(:tool_modules => TestObjects::AssetTools) }
+  subject { described_class.new(:tool_modules => [TestObjects::AssetTools]) }
 
   context "when setting scan paths" do
     it "correctly sets the paths" do

@@ -25,6 +25,18 @@ module Keystone
       @tools = []
       @post_build_steps = []
     end
+
+    def add_scan_path(path)
+      @scan_paths << path
+    end
+
+    def add_tool(tool)
+      @tools << tool
+    end
+
+    def add_post_build_step(tool)
+      @post_build_steps << tool
+    end
   end
 
   class ConfigurationError < StandardError
