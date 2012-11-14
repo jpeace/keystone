@@ -1,9 +1,19 @@
 module Keystone
   class PipelineConfiguration
-    attr_reader :asset_path, :tool_modules
+    attr_accessor :asset_path
+    attr_reader :tool_modules, :assets
 
     def initialize
       @tool_modules = []
+      @assets = []
+    end
+
+    def add_tool_module(mod)
+      @tool_modules << mod
+    end
+
+    def add_asset_config(asset)
+      @assets << asset
     end
   end
 

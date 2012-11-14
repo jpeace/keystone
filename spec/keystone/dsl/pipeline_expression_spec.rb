@@ -25,5 +25,6 @@ describe Keystone::Dsl::PipelineExpression do
     subject.asset do |a|
       a.should be_a(Keystone::Dsl::AssetExpression)
     end
+    subject.config.assets.should have_exactly(1).items
   end
 end
