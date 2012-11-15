@@ -1,5 +1,7 @@
 source :rubygems
 
+gem 'coffee-script'
+
 group :development do
   gem 'rake'
   gem 'rspec'
