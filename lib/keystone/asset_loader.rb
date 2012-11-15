@@ -5,16 +5,16 @@ module Keystone
     class << self
       def type_from_filename(filename)
         extensions = {
-          :coffee => ['coffee'],
-          :javascript => ['js'],
-          :sassy => ['scss'],
-          :css => ['css']
+          Types::Coffeescript => ['coffee'],
+          Types::Javascript => ['js'],
+          Types::Sassy => ['scss'],
+          Types::Css => ['css']
         }
 
         ext = filename.split('.').last
         found = extensions.select {|type, exts| exts.include? ext}.first
         if found.nil?
-          :unknown
+          Types::Unknown
         else
           found[0]
         end

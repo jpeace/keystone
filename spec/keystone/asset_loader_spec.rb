@@ -5,25 +5,25 @@ describe Keystone::AssetLoader do
 
   context "when determining content types from files" do
     it "recognizes coffeescript files" do
-      _cut.type_from_filename('script.coffee').should eq :coffee
+      _cut.type_from_filename('script.coffee').should eq Keystone::Types::Coffeescript
     end
     it "recognizes javascript files" do
-      _cut.type_from_filename('script.js').should eq :javascript
+      _cut.type_from_filename('script.js').should eq Keystone::Types::Javascript
     end
     it "recognizes sassy css files" do
-      _cut.type_from_filename('styles.scss').should eq :sassy
+      _cut.type_from_filename('styles.scss').should eq Keystone::Types::Sassy
     end
     it "recognizes css files" do
-      _cut.type_from_filename('styles.css').should eq :css
+      _cut.type_from_filename('styles.css').should eq Keystone::Types::Css
     end
     it "defaults to unknown" do
-      _cut.type_from_filename('settings.cfg').should eq :unknown
+      _cut.type_from_filename('settings.cfg').should eq Keystone::Types::Unknown
     end
     it "works with no extension" do
-      _cut.type_from_filename('license').should eq :unknown
+      _cut.type_from_filename('license').should eq Keystone::Types::Unknown
     end
     it "works with dots in the filename" do
-      _cut.type_from_filename('lib.min.js').should eq :javascript
+      _cut.type_from_filename('lib.min.js').should eq Keystone::Types::Javascript
     end
   end
 
