@@ -2,6 +2,7 @@ GEM
   remote: http://rubygems.org/
   specs:
     allison (2.0.3)
+    closure-compiler (1.1.7)
     coffee-script (2.2.0)
       coffee-script-source
       execjs
@@ -45,6 +46,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  closure-compiler
   coffee-script
   debugger
   echoe

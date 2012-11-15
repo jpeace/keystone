@@ -32,6 +32,15 @@ describe Keystone::AssetTools::Coffeescript do
     a.content = _coffeescript
   end
 
+  _unknown = Keystone::Asset.new do |a|
+    a.type = Keystone::Types::Unknown
+    a.content = "Shouldn't change"
+  end
+
+  it "doesn't transform non-coffeescript assets" do
+    subject.run(_unknown).content.should eq "Shouldn't change"
+  end
+
   it "changes the type to javascript" do
     subject.run(_asset).type.should eq Keystone::Types::Javascript
   end
