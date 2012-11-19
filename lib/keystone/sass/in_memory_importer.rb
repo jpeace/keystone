@@ -1,16 +1,12 @@
+require 'sass'
+
 module Keystone
   module Sass
-    class InMemoryImporter < Sass::Importers::Base
+    class InMemoryImporter < ::Sass::Importers::Base
+      @@modules = {}
       class << self
-        def templates=(paths)
-          @@templates = {}
-          paths.each do |path|
-            template_pattern = /(([\w\d\-_]+\/)*)_([\w\d\-_]+)\.[\w]+/
-            matches = template_pattern.match(path)
-            unless matches.nil?
-              @@templates["#{matches[1]}#{matches[3]}"] = File.read("#{sass_path}/#{path}")
-            end
-          end
+        def add_module(path, content)
+          @@modules[path] = content
         end
 
         def key(uri, options)
@@ -22,14 +18,14 @@ module Keystone
       end
 
       def find(uri, options)
-        return nil if @@templates[uri].nil?
+        return nil if @@modules[uri].nil?
 
         options.merge!({
           :syntax => :scss,
           :filename => uri,
           :importer => self.class
         })
-        Sass::Engine.new(@@templates[uri], options)
+        ::Sass::Engine.new(@@modules[uri], options)
       end
 
       def find_relative(uri, base, options)
@@ -46,10 +42,3 @@ module Keystone
     end
   end
 end
-
-# InMemoryImporter.templates = ['lib2/_styles.scss', 'lib1/_base.scss']
-
-# template = File.read("#{sass_path}/test.scss")
-# engine = Sass::Engine.new(template, :syntax => :scss, :filesystem_importer => InMemoryImporter)
-# output = engine.render
-# puts output
