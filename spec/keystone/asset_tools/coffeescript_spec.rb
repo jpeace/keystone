@@ -38,14 +38,14 @@ describe Keystone::AssetTools::Coffeescript do
   end
 
   it "doesn't transform non-coffeescript assets" do
-    subject.run(_unknown).content.should eq "Shouldn't change"
+    subject.run([_unknown]).first.content.should eq "Shouldn't change"
   end
 
   it "changes the type to javascript" do
-    subject.run(_asset).type.should eq Keystone::Types::Javascript
+    subject.run([_asset]).first.type.should eq Keystone::Types::Javascript
   end
 
   it "compiles the coffeescript to javascript" do
-    subject.run(_asset).content.should eq _javascript
+    subject.run([_asset]).first.content.should eq _javascript
   end
 end

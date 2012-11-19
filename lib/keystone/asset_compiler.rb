@@ -31,9 +31,7 @@ module Keystone
 
     def compile!
       return if compiled?
-      @assets = @assets.map do |a|
-        @toolchain.reduce(a) {|asset,tool| tool.run(asset)}
-      end
+      @toolchain.each {|t| @assets = t.run(@assets)}
       @compiled = true
     end
 
@@ -45,7 +43,7 @@ module Keystone
           a.type = package_type
           a.content = @assets.map{|a| a.content}.join("\n")
         end
-        @post_build.each {|t| @package = t.run(@package)}
+        @post_build.each {|t| @package = t.run([@package]).first}
       end
       @package
     end

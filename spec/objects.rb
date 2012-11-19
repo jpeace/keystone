@@ -7,43 +7,43 @@ module TestObjects
   module AssetTools
     class ReplaceQs
       include Keystone::AssetTool
-      def should_run?
+      def should_run?(asset)
         true
       end
-      def transform
-        @original.content.gsub(/[qQ]/, '*')
+      def transform(asset)
+        asset.content.gsub(/[qQ]/, '*')
       end
     end
 
     class ReplaceCaps
       include Keystone::AssetTool
-      def should_run?
+      def should_run?(asset)
         true
       end
-      def transform
-        @original.content.gsub(/[A-Z]/, '-')
+      def transform(asset)
+        asset.content.gsub(/[A-Z]/, '-')
       end
     end
 
     class DoubleString
       include Keystone::AssetTool
-      def should_run?
-        @original.type == :too_short
+      def should_run?(asset)
+        asset.type == :too_short
       end
-      def transform
+      def transform(asset)
         doubled = ''
-        @original.content.each_char {|c| doubled << "#{c}#{c}"}
+        asset.content.each_char {|c| doubled << "#{c}#{c}"}
         [:doubled, doubled]
       end
     end
 
     class ShortenString
       include Keystone::AssetTool
-      def should_run?
+      def should_run?(asset)
         true
       end
-      def transform
-        @original.content[1,100]
+      def transform(asset)
+        asset.content[1,100]
       end
     end
 

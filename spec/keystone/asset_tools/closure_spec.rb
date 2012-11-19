@@ -23,10 +23,10 @@ describe Keystone::AssetTools::Closure do
   end
 
   it "only tranforms javascript files" do
-    subject.run(_coffeescript).content.should eq "shouldn't change"
+    subject.run([_coffeescript]).first.content.should eq "shouldn't change"
   end
 
   it "minifies javascript files" do
-    subject.run(_asset).content.should eq _transformed
+    subject.run([_asset]).first.content.should eq _transformed
   end
 end
