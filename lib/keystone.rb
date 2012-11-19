@@ -1,10 +1,14 @@
 require 'keystone/version'
-%w(types dsl configuration asset asset_compiler asset_loader asset_pipeline asset_tool asset_tools).each do |dep|
+%w(types dsl configuration asset asset_compiler asset_loader asset_pipeline asset_tool asset_tools rake_task).each do |dep|
   require "keystone/#{dep}"
 end
 
 module Keystone
   class << self
+    def bootstrap(config_path)
+      build_pipeline(Keystone::PipelineConfiguration.from_file(config_path))
+    end
+
     def build_pipeline(config)
       compilers = []
 

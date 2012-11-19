@@ -5,6 +5,10 @@ describe "classes mixing in the AssetTool module" do
   it "return an asset when run" do
     replace_qs.run([asset1]).first.should be_is_a(Keystone::Asset)
   end
+
+  it "preserves the path" do
+    replace_qs.run([asset1]).first.path.should eq 'path/to/file'
+  end
     
   context "when defining should_run?" do
     it "can return false to be skipped" do

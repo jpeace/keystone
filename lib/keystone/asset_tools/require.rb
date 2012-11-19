@@ -13,12 +13,12 @@ module Keystone
 (function() {
   var modules = window.modules || [];
   window.require = function(path) {
-    var transformed_path = path.replace(/\//g, '__')
-    var factory = modules[tranformed_path];
+    var transformed_path = path.replace(/\\//g, '__');
+    var factory = modules[transformed_path];
     if (factory === null) {
       return null;
     } else {
-      return modules[tranformed_path]();
+      return modules[transformed_path]();
     }
   };
 })();}

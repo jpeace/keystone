@@ -60,7 +60,9 @@ module Keystone
 
     private
 
-    def scan_folder(folder)
+    def scan_folder(folder, root_folder=nil)
+      root_folder = folder if root_folder.nil?
+
       full_path = "#{@asset_path}/#{folder}"
 
       Dir.foreach(full_path) do |file|
@@ -68,16 +70,12 @@ module Keystone
 
         file_path = "#{full_path}/#{file}"
         if File.directory?(file_path)
-          scan_folder("#{folder}/#{file}")
+          scan_folder("#{folder}/#{file}", root_folder)
         else
           filename = file_path[(file_path.rindex('/')+1)..-1]
           @assets << Asset.new do |a|
             a.name = AssetLoader.name_from_filename(filename)
-            if folder.include? '/'
-              a.path = folder[(folder.index('/') + 1)..-1]
-            else
-              a.path = ''
-            end
+            a.path = folder.gsub(/^#{root_folder}(\/)?/, '')
             a.type = AssetLoader.type_from_filename(filename)
             a.content = File.read(file_path)
           end

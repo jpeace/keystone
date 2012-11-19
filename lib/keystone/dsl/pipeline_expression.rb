@@ -18,7 +18,7 @@ module Keystone
       end
 
       def asset(name)
-        expr = AssetExpression.new(Keystone::AssetConfiguration.new(name), :tool_modules => @config.tool_modules)
+        expr = AssetExpression.new(Keystone::AssetConfiguration.new(name), :tool_modules => @config.tool_modules, :asset_path => @config.asset_path)
         yield expr if block_given?
         @config.add_asset_config(expr.config)
       end

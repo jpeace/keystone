@@ -11,6 +11,7 @@ module Keystone
           Asset.new do |a|
             a.name = asset.name
             a.type = new_type || asset.type
+            a.path = asset.path
             a.content = new_content
           end
         else

@@ -65,6 +65,7 @@ module TestObjects
       Keystone::Asset.new do |a|
         a.name = "asset1"
         a.type = :boring
+        a.path = 'path/to/file'
         a.content = "How Quick is Shaq?"
       end
     end

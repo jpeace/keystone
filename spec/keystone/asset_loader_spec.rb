@@ -96,5 +96,17 @@ describe Keystone::AssetLoader do
 
       subject.assets.should have_exactly(7).items
     end
+
+    it "correctly builds paths with a subfolder as root" do
+      subject.scan!('js/lib1')
+
+      subject.assets.should have_exactly(3).items
+      
+      js2 = subject.asset('js2')
+      js2.path.should eq ''
+
+      support = subject.asset('support/support')
+      support.path.should eq 'support'
+    end
   end
 end

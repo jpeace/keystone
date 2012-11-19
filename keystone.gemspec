@@ -6,7 +6,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 1.2") if s.respond_to? :required_rubygems_version=
   s.authors = ["Music One Live"]
-  s.date = "2012-11-13"
+  s.date = "2012-11-19"
   s.description = "Asset pipeline"
   s.email = "admin@musiconelive.com"
   s.extra_rdoc_files = ["lib/keystone.rb", "lib/keystone/asset.rb", "lib/keystone/asset_compiler.rb", "lib/keystone/asset_loader.rb", "lib/keystone/asset_tool.rb", "lib/keystone/version.rb"]

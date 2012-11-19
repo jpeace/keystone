@@ -30,6 +30,7 @@ describe Keystone::AssetTools::Coffeescript do
   _asset = Keystone::Asset.new do |a|
     a.type = Keystone::Types::Coffeescript
     a.content = _coffeescript
+    a.path = 'path/to/file'
   end
 
   _unknown = Keystone::Asset.new do |a|
@@ -47,5 +48,9 @@ describe Keystone::AssetTools::Coffeescript do
 
   it "compiles the coffeescript to javascript" do
     subject.run([_asset]).first.content.should eq _javascript
+  end
+
+  it "preserves the path" do
+    subject.run([_asset]).first.path.should eq 'path/to/file'
   end
 end
