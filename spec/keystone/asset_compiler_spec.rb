@@ -9,8 +9,8 @@ describe Keystone::AssetCompiler do
 
     it "compiles assets" do
       subject.compile!
-      subject['asset1'].content.should eq 'How *uick is Sha*?'
-      subject['asset2'].content.should eq '*uite doubled'
+      subject.asset('path/to/file/asset1').content.should eq 'How *uick is Sha*?'
+      subject.asset('asset2').content.should eq '*uite doubled'
     end
   end
 
@@ -22,8 +22,8 @@ describe Keystone::AssetCompiler do
 
     it "compiles assets" do
       subject.compile!
-      subject['asset1'].content.should eq '-ow -uick is -ha*?'
-      subject['asset2'].content.should eq '-uite doubled'
+      subject.asset('path/to/file/asset1').content.should eq '-ow -uick is -ha*?'
+      subject.asset('asset2').content.should eq '-uite doubled'
     end
   end
 
@@ -33,15 +33,15 @@ describe Keystone::AssetCompiler do
     
     c1.compile! && c2.compile!
     
-    c1['asset1'].content.should eq '-ow *uick is -ha*?'
-    c2['asset1'].content.should eq '-ow -uick is -ha*?'
+    c1.asset('path/to/file/asset1').content.should eq '-ow *uick is -ha*?'
+    c2.asset('path/to/file/asset1').content.should eq '-ow -uick is -ha*?'
   end
 
   it "only compiles once" do
     c = described_class.new([TestObjects::AssetTools::ShortenString], [asset2])
     c.compile!
     c.compile!
-    c['asset2'].content.should eq 'uite doubled'
+    c.asset('asset2').content.should eq 'uite doubled'
   end
 
   context "when building a package" do

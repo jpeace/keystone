@@ -1,6 +1,8 @@
 module Keystone
   class AssetCompiler
-    attr_reader :package_name, :assets, :toolchain, :post_build
+    include AssetContainer
+    
+    attr_reader :package_name, :toolchain, :post_build
 
     def initialize(toolchain, assets=[], options={})
       @compiled = false
@@ -11,10 +13,6 @@ module Keystone
 
       @package_name = options[:package_name]
       @post_build = (options[:post_build] || []).map {|t| t.new}
-    end
-
-    def [](asset_name)
-      @assets.select {|a| a.name == asset_name}.first
     end
 
     def package_name

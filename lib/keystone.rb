@@ -1,5 +1,5 @@
 require 'keystone/version'
-%w(types dsl configuration asset asset_compiler asset_loader asset_pipeline asset_tool asset_tools rake_task).each do |dep|
+%w(core dsl asset_tools server rake_task).each do |dep|
   require "keystone/#{dep}"
 end
 
