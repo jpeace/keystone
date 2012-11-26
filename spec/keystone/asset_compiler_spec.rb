@@ -69,7 +69,7 @@ describe Keystone::AssetCompiler do
 
       package.name.should eq 'boring'
       package.type.should eq :boring
-      package.content.should eq "ow -uick is -haq?\nuite doubled"
+      package.content.should eq "ow -uick is -haq?\nuite doubled\n"
     end
 
     it "uses post-build steps if specified" do
@@ -77,7 +77,14 @@ describe Keystone::AssetCompiler do
       package = c.build!
 
       package.type.should eq :boring
-      package.content.should eq "-ow -uick is -ha*?\n-ot *uick enough"
+      package.content.should eq "-ow -uick is -ha*?\n-ot *uick enough\n"
+    end
+
+    it "can skip post-build steps for certain assets" do
+      c = described_class.new([TestObjects::AssetTools::ReplaceCaps], [asset1, asset3], :post_build => [TestObjects::AssetTools::ReplaceQs], :post_build_ignore_patterns => [/asset1/])
+      package = c.build!
+
+      package.content.should eq "-ot *uick enough\n-ow -uick is -haq?"
     end
   end
 end

@@ -13,6 +13,7 @@ module Keystone
 
       @package_name = options[:package_name]
       @post_build = (options[:post_build] || []).map {|t| t.new}
+      @post_build_ignore_patterns = options[:post_build_ignore_patterns] || []
     end
 
     def package_name
@@ -36,12 +37,23 @@ module Keystone
     def build!
       if @package.nil?
         compile!
+
+        non_pb_assets, pb_assets = @assets.partition {|a| @post_build_ignore_patterns.any? {|re| re.match(a.name)}}
+        non_pb_package, pb_package = [non_pb_assets, pb_assets].map do |assets|
+          Asset.new do |a|
+            # a.name = package_name
+            # a.type = package_type
+            a.content = assets.map{|a| a.content}.join("\n")
+          end
+        end
+        @post_build.each {|t| pb_package = t.run([pb_package]).first}
+
         @package = Asset.new do |a|
           a.name = package_name
           a.type = package_type
-          a.content = @assets.map{|a| a.content}.join("\n")
+          a.content = "#{pb_package.content}\n#{non_pb_package.content}" #@assets.map{|a| a.content}.join("\n")
         end
-        @post_build.each {|t| @package = t.run([@package]).first}
+        
       end
       @package
     end
