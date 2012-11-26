@@ -81,7 +81,7 @@ describe Keystone::AssetCompiler do
     end
 
     it "can skip post-build steps for certain assets" do
-      c = described_class.new([TestObjects::AssetTools::ReplaceCaps], [asset1, asset3], :post_build => [TestObjects::AssetTools::ReplaceQs], :post_build_ignore_patterns => [/asset1/])
+      c = described_class.new([TestObjects::AssetTools::ReplaceCaps], [asset1, asset3], :post_build => [TestObjects::AssetTools::ReplaceQs], :post_build_ignore_patterns => [/^asset1$/])
       package = c.build!
 
       package.content.should eq "-ot *uick enough\n-ow -uick is -haq?"

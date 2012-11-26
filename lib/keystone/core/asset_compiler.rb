@@ -2,7 +2,7 @@ module Keystone
   class AssetCompiler
     include AssetContainer
     
-    attr_reader :package_name, :toolchain, :post_build
+    attr_reader :package_name, :toolchain, :post_build, :post_build_ignore_patterns
 
     def initialize(toolchain, assets=[], options={})
       @compiled = false
@@ -41,8 +41,6 @@ module Keystone
         non_pb_assets, pb_assets = @assets.partition {|a| @post_build_ignore_patterns.any? {|re| re.match(a.name)}}
         non_pb_package, pb_package = [non_pb_assets, pb_assets].map do |assets|
           Asset.new do |a|
-            # a.name = package_name
-            # a.type = package_type
             a.content = assets.map{|a| a.content}.join("\n")
           end
         end
@@ -51,7 +49,7 @@ module Keystone
         @package = Asset.new do |a|
           a.name = package_name
           a.type = package_type
-          a.content = "#{pb_package.content}\n#{non_pb_package.content}" #@assets.map{|a| a.content}.join("\n")
+          a.content = "#{pb_package.content}\n#{non_pb_package.content}"
         end
         
       end

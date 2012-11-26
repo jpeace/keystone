@@ -24,6 +24,18 @@ module Keystone
         tools.each { |t| @config.add_post_build_step(find_tool(t)) }
       end
 
+      def skip_post_build_for(*patterns)
+        patterns.each do |pattern|
+          if pattern.is_a? Regexp
+            @config.add_post_build_ignore_pattern(pattern)
+          elsif pattern.is_a? String
+            @config.add_post_build_ignore_pattern(/^#{pattern}$/)
+          else
+            raise Keystone::ConfigurationError.new("Bad post-build pattern given: #{pattern}")
+          end
+        end
+      end
+
       private
 
       def find_tool(tool)

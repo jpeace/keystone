@@ -17,7 +17,10 @@ module Keystone
         asset_config.scan_paths.each do |path|
           loader.scan!(path)
         end
-        compilers << AssetCompiler.new(asset_config.tools, loader.assets, :post_build => asset_config.post_build_steps, :package_name => asset_config.name)
+        compilers << AssetCompiler.new(asset_config.tools, loader.assets, 
+          :post_build => asset_config.post_build_steps, 
+          :post_build_ignore_patterns => asset_config.post_build_ignore_patterns, 
+          :package_name => asset_config.name)
       end
 
       AssetPipeline.new(compilers)

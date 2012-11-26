@@ -5,6 +5,7 @@ asset 'titan.js' do |a|
   a.scan 'js', 'coffee'
   a.toolchain :coffeescript, :require
   a.post_build :closure
+  a.skip_post_build_for 'support', /\.coffee$/
 end
 
 asset 'titan.css' do |a|

@@ -27,13 +27,14 @@ module Keystone
   end
 
   class AssetConfiguration
-    attr_reader :name, :scan_paths, :tools, :post_build_steps
+    attr_reader :name, :scan_paths, :tools, :post_build_steps, :post_build_ignore_patterns
 
     def initialize(name)
       @name = name
       @scan_paths = []
       @tools = []
       @post_build_steps = []
+      @post_build_ignore_patterns = []
     end
 
     def add_scan_path(path)
@@ -46,6 +47,10 @@ module Keystone
 
     def add_post_build_step(tool)
       @post_build_steps << tool
+    end
+
+    def add_post_build_ignore_pattern(pattern)
+      @post_build_ignore_patterns << pattern
     end
   end
 
