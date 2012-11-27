@@ -9,7 +9,7 @@ module Keystone
     end
 
     def current_hash
-      Digest::MD5.hexdigest(File.read(@location_on_disk))
+      @location_on_disk.nil ? Digest::MD5.hexdigest(@content) : Digest::MD5.hexdigest(File.read(@location_on_disk))
     end
   end
 end
