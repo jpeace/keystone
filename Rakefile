@@ -9,7 +9,7 @@ Echoe.new("keystone", "0.0.1") do |p|
   p.email           = "admin@musiconelive.com"  
   p.ignore_pattern  = FileList[".gitignore"]  
   p.development_dependencies = []
-  p.runtime_dependencies = []
+  p.runtime_dependencies = ['coffee-script','closure-compiler','sass','sinatra']
 end  
 
 task :default => ['rspec']
