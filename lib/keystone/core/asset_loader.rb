@@ -21,7 +21,7 @@ module Keystone
       end
 
       def name_from_filename(filename)
-        filename.split('.').first
+        filename.split('.').first.gsub(/\-\d+/, '')
       end
     end
 

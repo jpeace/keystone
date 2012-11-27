@@ -33,7 +33,7 @@ describe Keystone::AssetLoader do
     end
 
     it "ignores version and extra info" do
-      _cut.name_from_filename('lib.1.3.4.min.js').should eq 'lib'
+      _cut.name_from_filename('lib-1.3.4.min.js').should eq 'lib'
     end
   end
 
