@@ -19,6 +19,7 @@ module Keystone
       asset = nil
 
       @@pipeline.compilers.each do |c|
+        c.reset!
         c.compile!
         asset = c.asset(requested_path)
         break unless asset.nil?

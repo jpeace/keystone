@@ -44,6 +44,13 @@ describe Keystone::AssetCompiler do
     c.asset('asset2').content.should eq 'uite doubled'
   end
 
+  it "can be reset after being compiled" do
+    c = described_class.new([TestObjects::AssetTools::ShortenString], [asset2])
+    c.compile!
+    c.reset!
+    c.asset('asset2').content.should eq 'Quite doubled'
+  end
+
   context "when building a package" do
     it "chooses the type of the first asset when determining package type" do
       c = described_class.new([], [asset1, asset3])

@@ -9,8 +9,8 @@ module Keystone
       @package = nil
 
       @toolchain = toolchain.map {|t| t.new}
-      @assets = assets
-
+      @original = @assets = assets
+      
       @package_name = options[:package_name]
       @post_build = (options[:post_build] || []).map {|t| t.new}
       @post_build_ignore_patterns = options[:post_build_ignore_patterns] || []
@@ -32,6 +32,11 @@ module Keystone
       return if compiled?
       @toolchain.each {|t| @assets = t.run(@assets)}
       @compiled = true
+    end
+
+    def reset!
+      @assets = @original
+      @compiled = false
     end
 
     def build!
