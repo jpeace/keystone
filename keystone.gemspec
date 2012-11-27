@@ -6,7 +6,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 1.2") if s.respond_to? :required_rubygems_version=
   s.authors = ["Music One Live"]
-  s.date = "2012-11-20"
+  s.date = "2012-11-27"
   s.description = "Asset pipeline"
   s.email = "admin@musiconelive.com"
   s.extra_rdoc_files = ["lib/keystone.rb", "lib/keystone/asset_tools.rb", "lib/keystone/asset_tools/closure.rb", "lib/keystone/asset_tools/coffeescript.rb", "lib/keystone/asset_tools/require.rb", "lib/keystone/asset_tools/sassy.rb", "lib/keystone/core.rb", "lib/keystone/core/asset.rb", "lib/keystone/core/asset_compiler.rb", "lib/keystone/core/asset_container.rb", "lib/keystone/core/asset_loader.rb", "lib/keystone/core/asset_pipeline.rb", "lib/keystone/core/asset_tool.rb", "lib/keystone/core/configuration.rb", "lib/keystone/core/types.rb", "lib/keystone/dsl.rb", "lib/keystone/dsl/asset_expression.rb", "lib/keystone/dsl/pipeline_expression.rb", "lib/keystone/rake_task.rb", "lib/keystone/sass/in_memory_importer.rb", "lib/keystone/server.rb", "lib/keystone/version.rb"]
