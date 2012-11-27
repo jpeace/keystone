@@ -39,6 +39,8 @@ describe Keystone::AssetTools::Sassy do
   _simple = Keystone::Asset.new do |a|
     a.name = 'simple'
     a.type = Keystone::Types::Sassy
+    a.path = 'path/to/file'
+    a.location_on_disk = '/home/test/path/to/file'
     a.content = _simple_sassy
   end
 
@@ -78,4 +80,13 @@ describe Keystone::AssetTools::Sassy do
     transformed.should have_exactly(1).items
     transformed.first.content.should eq _complex_css
   end
+
+  it "preserves the path" do
+    subject.run([_simple]).first.path.should eq 'path/to/file'
+  end
+
+  it "preserves the location on disk" do
+    subject.run([_simple]).first.location_on_disk.should eq '/home/test/path/to/file'
+  end
+  
 end

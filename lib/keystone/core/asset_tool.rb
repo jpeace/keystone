@@ -12,6 +12,7 @@ module Keystone
             a.name = asset.name
             a.type = new_type || asset.type
             a.path = asset.path
+            a.location_on_disk = asset.location_on_disk
             a.content = new_content
           end
         else

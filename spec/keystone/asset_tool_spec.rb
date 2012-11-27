@@ -9,6 +9,10 @@ describe "classes mixing in the AssetTool module" do
   it "preserves the path" do
     replace_qs.run([asset1]).first.path.should eq 'path/to/file'
   end
+
+  it "preserves the location on disk" do
+    replace_qs.run([asset1]).first.location_on_disk.should eq '/home/test/path/to/file'
+  end
     
   context "when defining should_run?" do
     it "can return false to be skipped" do

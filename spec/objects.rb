@@ -66,6 +66,7 @@ module TestObjects
         a.name = "asset1"
         a.type = :boring
         a.path = 'path/to/file'
+        a.location_on_disk = '/home/test/path/to/file'
         a.content = "How Quick is Shaq?"
       end
     end

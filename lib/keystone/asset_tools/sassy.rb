@@ -25,6 +25,8 @@ module Keystone
             transformed << Keystone::Asset.new do |a|
               a.name = template.name
               a.type = Keystone::Types::Css
+              a.path = template.path
+              a.location_on_disk = template.location_on_disk
               a.content = compile(template.content)
             end
           else
