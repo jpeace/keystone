@@ -1,3 +1,5 @@
+require 'digest/md5'
+
 module Keystone
   module AssetContainer
     def assets(name_or_type=nil)

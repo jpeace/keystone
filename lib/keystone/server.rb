@@ -3,6 +3,8 @@ require 'sinatra'
 module Keystone
   class Server < ::Sinatra::Base
     @@pipeline = nil
+    @@asset_hashes = Hash.new('')
+
     class << self
       def pipeline
         @@pipeline
@@ -12,16 +14,30 @@ module Keystone
       end
     end
 
+    def rebuild_hashes!(compiler)
+      compiler.reset!
+      compiler.compile!
+      c.assets.each do |a|
+        path_and_name = "#{a.path}/#{a.name}"
+        @@asset_hashes[path_and_name] = a.current_hash
+      end
+    end
+
     get '*' do
       return [404, 'Not Found'] if @@pipeline.nil?
-
+      
       requested_path = params[:splat].first[1..-1]
       asset = nil
 
       @@pipeline.compilers.each do |c|
-        c.reset!
-        c.compile!
+        c.compile!  
+        
         asset = c.asset(requested_path)
+        if !asset.nil? && (asset.current_hash != @@asset_hashes[requested_path])
+          rebuild_hashes!(c)
+          asset = c.asset(requested_path)
+        end
+      
         break unless asset.nil?
       end
 

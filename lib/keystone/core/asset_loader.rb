@@ -54,6 +54,7 @@ module Keystone
             a.path = folder.gsub(/^#{root_folder}(\/)?/, '')
             a.type = AssetLoader.type_from_filename(filename)
             a.content = File.read(file_path)
+            a.location_on_disk = File.expand_path(file_path)
           end
         end
       end

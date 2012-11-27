@@ -67,6 +67,7 @@ describe Keystone::AssetLoader do
       readme_file.name.should eq 'readme'
       readme_file.path.should eq ''
       readme_file.content.should eq 'Read Me!!!'
+      readme_file.location_on_disk.should eq File.expand_path("#{File.dirname(__FILE__)}/../environment/assets/css/readme.txt")
     end
 
     it "scans subfolders" do
