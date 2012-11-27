@@ -17,7 +17,7 @@ module Keystone
     def rebuild_hashes!(compiler)
       compiler.reset!
       compiler.compile!
-      c.assets.each do |a|
+      compiler.assets.each do |a|
         path_and_name = "#{a.path}/#{a.name}"
         @@asset_hashes[path_and_name] = a.current_hash
       end
