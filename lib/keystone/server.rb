@@ -18,12 +18,6 @@ module Keystone
       end
     end
 
-    def mime_types
-      {
-
-      }
-    end
-
     def rebuild_hashes!(compiler)
       compiler.reset!
       compiler.compile!
