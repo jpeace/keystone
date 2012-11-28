@@ -3,7 +3,7 @@ describe "classes mixing in the AssetTool module" do
   include TestObjects::Assets
 
   it "return an asset when run" do
-    replace_qs.run([asset1]).first.should be_is_a(Keystone::Asset)
+    replace_qs.run([asset1]).first.should be_instance_of Keystone::Asset
   end
 
   it "preserves the path" do

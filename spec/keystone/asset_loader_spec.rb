@@ -51,19 +51,19 @@ describe Keystone::AssetLoader do
 
     it "can pull assets by name" do
       subject.scan!('css')
-      subject.assets('style1').first.should be_is_a(Keystone::Asset)
+      subject.assets('style1').first.should be_instance_of Keystone::Asset
     end
 
     it "can pull a single asset by name and path" do
       subject.scan!('js')
-      subject.asset('lib1/js2').should be_is_a(Keystone::Asset)
+      subject.asset('lib1/js2').should be_instance_of Keystone::Asset
     end
 
     it "correctly reads assets" do
       subject.scan!('css')
 
       readme_file = subject.asset('readme')
-      readme_file.should be_is_a(Keystone::Asset)
+      readme_file.should be_instance_of Keystone::Asset
       readme_file.name.should eq 'readme'
       readme_file.path.should eq ''
       readme_file.content.should eq 'Read Me!!!'
