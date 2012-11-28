@@ -5,6 +5,10 @@ module Keystone
     @@pipeline = nil
     @@asset_hashes = Hash.new('')
 
+    @@mime_types = Hash.new('text/plain')
+    @@mime_types[Keystone::Types::Javascript] = 'text/javascript'
+    @@mime_types[Keystone::Types::Css] = 'text/css'
+
     class << self
       def pipeline
         @@pipeline
@@ -12,6 +16,12 @@ module Keystone
       def pipeline=(pipeline)
         @@pipeline = pipeline
       end
+    end
+
+    def mime_types
+      {
+
+      }
     end
 
     def rebuild_hashes!(compiler)
@@ -44,6 +54,7 @@ module Keystone
       if asset.nil?
         [404, 'Not Found']
       else
+        content_type @@mime_types[asset.type], :charset => 'utf-8'
         [200, asset.content]
       end
     end

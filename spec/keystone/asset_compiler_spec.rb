@@ -73,6 +73,14 @@ describe Keystone::AssetCompiler do
     end
   end
 
+  it "removes assets with no disk location when resetting" do
+    c = described_class.new([TestObjects::AssetTools::ShortenString], [asset3])
+    c.compile!
+    c.assets.should have_exactly(1).items
+    c.reset!
+    c.assets.should be_empty
+  end
+
   context "when building a package" do
     it "chooses the type of the first asset when determining package type" do
       c = described_class.new([], [asset1, asset3])
