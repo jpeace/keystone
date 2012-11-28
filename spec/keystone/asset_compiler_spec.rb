@@ -61,8 +61,10 @@ describe Keystone::AssetCompiler do
     c = described_class.new([TestObjects::AssetTools::ShortenString], [asset2])
     c.compile!
     c.asset('asset2').content.should eq 'uite doubled'
+    c.asset('asset2').type.should eq :shortened
     c.reset!
     c.asset('asset2').content.should eq 'Quite doubled'
+    c.asset('asset2').type.should eq :too_short
     
     class File
       class << self
@@ -94,8 +96,8 @@ describe Keystone::AssetCompiler do
       c = described_class.new([TestObjects::AssetTools::ReplaceCaps, TestObjects::AssetTools::ShortenString], [asset1, asset2])
       package = c.build!
 
-      package.name.should eq 'boring'
-      package.type.should eq :boring
+      package.name.should eq 'shortened'
+      package.type.should eq :shortened
       package.content.should eq "ow -uick is -haq?\nuite doubled\n"
     end
 

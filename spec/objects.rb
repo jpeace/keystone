@@ -43,7 +43,7 @@ module TestObjects
         true
       end
       def transform(asset)
-        asset.content[1,100]
+        [:shortened, asset.content[1,100]]
       end
     end
 
