@@ -9,7 +9,7 @@ module Keystone
       @package = nil
 
       @toolchain = toolchain.map {|t| t.new}
-      @original = @assets = assets
+      @assets = assets
       
       @package_name = options[:package_name]
       @post_build = (options[:post_build] || []).map {|t| t.new}
@@ -35,7 +35,11 @@ module Keystone
     end
 
     def reset!
-      @assets = @original
+      @assets.each do |a|
+        unless a.location_on_disk.nil?
+          a.content = File.read(a.location_on_disk)
+        end
+      end
       @compiled = false
     end
 

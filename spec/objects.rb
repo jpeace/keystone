@@ -75,6 +75,7 @@ module TestObjects
       Keystone::Asset.new do |a|
         a.name = "asset2"
         a.type = :too_short
+        a.location_on_disk = '/home/test/file2'
         a.content = "Quite doubled"
       end
     end

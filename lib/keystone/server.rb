@@ -18,7 +18,7 @@ module Keystone
       compiler.reset!
       compiler.compile!
       compiler.assets.each do |a|
-        path_and_name = "#{a.path}/#{a.name}"
+        path_and_name = a.path == '' ? a.name : "#{a.path}/#{a.name}"
         @@asset_hashes[path_and_name] = a.current_hash
       end
     end

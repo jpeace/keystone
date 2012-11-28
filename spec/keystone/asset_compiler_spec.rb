@@ -45,10 +45,30 @@ describe Keystone::AssetCompiler do
   end
 
   it "can be reset after being compiled" do
+    class File
+      class << self
+        alias old_read read
+        def read(filename)
+          if filename == '/home/test/file2'
+            'Quite doubled'
+          else
+            old_read(filename)
+          end
+        end
+      end
+    end
+    
     c = described_class.new([TestObjects::AssetTools::ShortenString], [asset2])
     c.compile!
+    c.asset('asset2').content.should eq 'uite doubled'
     c.reset!
     c.asset('asset2').content.should eq 'Quite doubled'
+    
+    class File
+      class << self
+        alias read old_read
+      end
+    end
   end
 
   context "when building a package" do
