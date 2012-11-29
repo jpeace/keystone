@@ -19,6 +19,7 @@ describe Keystone::PipelineConfiguration do
     css_asset.scan_paths.should include 'css'
     css_asset.scan_paths.should include 'scss'
     css_asset.tools.should include Keystone::AssetTools::Sassy
+    css_asset.post_build_ignore_patterns.should be_empty
   end
 
   it "can be used to build a pipeline" do
@@ -36,5 +37,6 @@ describe Keystone::PipelineConfiguration do
     css_compiler = pipeline.compiler('titan.css')
     css_compiler.assets.should have_exactly(4).items
     css_compiler.toolchain.should have_exactly(1).items
+    css_compiler.post_build_ignore_patterns.should be_empty
   end
 end

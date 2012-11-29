@@ -56,6 +56,7 @@ module Keystone
         non_pb_assets, pb_assets = @assets.partition {|a| @post_build_ignore_patterns.any? {|re| re.match(a.name)}}
         non_pb_package, pb_package = [non_pb_assets, pb_assets].map do |assets|
           Asset.new do |a|
+            a.type = package_type
             a.content = assets.map{|a| a.content}.join("\n")
           end
         end

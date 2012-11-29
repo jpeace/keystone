@@ -10,7 +10,7 @@ describe Keystone::AssetCompiler do
     it "compiles assets" do
       subject.compile!
       subject.asset('path/to/file/asset1').content.should eq 'How *uick is Sha*?'
-      subject.asset('asset2').content.should eq '*uite doubled'
+      subject.asset('asset2').content.should eq 'Quite doubled'
     end
   end
 

@@ -8,7 +8,7 @@ module TestObjects
     class ReplaceQs
       include Keystone::AssetTool
       def should_run?(asset)
-        true
+        asset.type == :boring
       end
       def transform(asset)
         asset.content.gsub(/[qQ]/, '*')
