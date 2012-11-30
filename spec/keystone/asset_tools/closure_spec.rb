@@ -9,7 +9,7 @@ describe Keystone::AssetTools::Closure do
   }
 
   _transformed = 
-%{var Class=function(){this.saySomething=function(a){alert(a)}},Object=new Class;
+%{var Class=function(){this.saySomething=function(param){alert(param)}};var Object=new Class;
 }
 
   _asset = Keystone::Asset.new do |a|
