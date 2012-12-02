@@ -44,9 +44,9 @@ module Keystone
             klass = mod.const_get(class_name_from_symbol(tool))
             return klass
           rescue
-            raise Keystone::ConfigurationError.new("Bad tool given for toolchain: #{tool}")
           end
         end
+        raise Keystone::ConfigurationError.new("Bad tool given for toolchain: #{tool}")
       end
 
       def class_name_from_symbol(sym)

@@ -1,7 +1,7 @@
 describe Keystone::Dsl::AssetExpression do
   subject { 
     described_class.new(Keystone::AssetConfiguration.new('asset'), 
-      :tool_modules => [TestObjects::AssetTools],
+      :tool_modules => [Keystone::AssetTools, TestObjects::AssetTools],
       :asset_path => asset_path) 
   }
 
