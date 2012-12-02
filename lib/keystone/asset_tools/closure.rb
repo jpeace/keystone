@@ -8,7 +8,8 @@ module Keystone
         asset.type == Keystone::Types::Javascript
       end
       def transform(asset)
-        ::Closure::Compiler.new(:compilation_level => 'WHITESPACE_ONLY').compile(asset.content)
+        # ::Closure::Compiler.new(:compilation_level => 'WHITESPACE_ONLY').compile(asset.content)
+        ::Closure::Compiler.new.compile(asset.content)
       end
     end
   end
