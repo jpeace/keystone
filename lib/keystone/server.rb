@@ -34,7 +34,11 @@ module Keystone
       asset = nil
 
       @@pipeline.compilers.each do |c|
-        c.compile!  
+        begin
+          c.compile!  
+        rescue
+          rebuild_hashes!(c)
+        end
         
         asset = c.asset(requested_path)
         if !asset.nil? && (asset.current_hash != @@asset_hashes[requested_path])
