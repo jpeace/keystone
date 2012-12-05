@@ -42,7 +42,7 @@ module Keystone
       full_path = "#{@asset_path}/#{folder}"
 
       Dir.foreach(full_path) do |file|
-        next if ['.', '..'].include?(file)
+        next if file[/^\./]
 
         file_path = "#{full_path}/#{file}"
         if File.directory?(file_path)

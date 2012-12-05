@@ -109,5 +109,10 @@ describe Keystone::AssetLoader do
       support = subject.asset('support/support')
       support.path.should eq 'support'
     end
+
+    it "ignores dot files" do
+      subject.scan!('dotfiles')
+      subject.assets.should have_exactly(1).items
+    end
   end
 end
