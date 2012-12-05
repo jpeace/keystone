@@ -16,6 +16,15 @@ module Keystone
       def pipeline=(pipeline)
         @@pipeline = pipeline
       end
+      
+      # Forces a reload from disk if compilation fails
+      def safe_compile!(compiler)
+        begin
+          compiler.compile!
+        rescue
+          rebuild_hashes(compiler)
+        end
+      end    
     end
 
     def rebuild_hashes!(compiler)
@@ -27,15 +36,6 @@ module Keystone
       end
     end
 
-    # Forces a reload from disk if compilation fails
-    def safe_compile!(compiler)
-      begin
-        compiler.compile!
-      rescue
-        rebuild_hashes(compiler)
-      end
-    end
-
     get '*' do
       return [404, 'Not Found'] if @@pipeline.nil?
       
@@ -43,7 +43,7 @@ module Keystone
       asset = nil
 
       @@pipeline.compilers.each do |c|
-        safe_compile!(c)
+        Keystone::Server.safe_compile!(c)
         
         asset = c.asset(requested_path)
         if !asset.nil? && (asset.current_hash != @@asset_hashes[requested_path])
@@ -72,7 +72,7 @@ module Keystone
             raise "No compiler found for #{asset_name}" if compiler.nil?
 
             if ENV['RACK_ENV'] == 'development'
-              safe_compile!(compiler)
+              Keystone::Server.safe_compile!(compiler)
               tags = []
               compiler.assets.each do |a|
                 path = (a.path == '') ? a.name : "#{a.path}/#{a.name}"
