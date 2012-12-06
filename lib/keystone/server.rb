@@ -22,7 +22,7 @@ module Keystone
         begin
           compiler.compile!
         rescue
-          rebuild_hashes(compiler)
+          rebuild_hashes!(compiler)
         end
       end    
 
