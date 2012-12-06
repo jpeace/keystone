@@ -48,7 +48,7 @@ module Keystone
         
         asset = c.asset(requested_path)
         if !asset.nil? && (asset.current_hash != @@asset_hashes[requested_path])
-          rebuild_hashes!(c)
+          Keystone::Server.rebuild_hashes!(c)
           asset = c.asset(requested_path)
         end
       
