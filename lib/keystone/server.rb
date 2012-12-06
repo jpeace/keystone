@@ -25,15 +25,16 @@ module Keystone
           rebuild_hashes(compiler)
         end
       end    
-    end
 
-    def rebuild_hashes!(compiler)
-      compiler.reset!
-      compiler.compile!
-      compiler.assets.each do |a|
-        path_and_name = a.path == '' ? a.name : "#{a.path}/#{a.name}"
-        @@asset_hashes[path_and_name] = a.current_hash
-      end
+      # Reloads files from disk and recalculates MD5 hashes
+      def rebuild_hashes!(compiler)
+        compiler.reset!
+        compiler.compile!
+        compiler.assets.each do |a|
+          path_and_name = a.path == '' ? a.name : "#{a.path}/#{a.name}"
+          @@asset_hashes[path_and_name] = a.current_hash
+        end
+      end    
     end
 
     get '*' do
