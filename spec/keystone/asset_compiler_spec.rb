@@ -109,6 +109,12 @@ describe Keystone::AssetCompiler do
       package.content.should eq "ow -uick is -haq?\nuite doubled\n"
     end
 
+    it "includes external assets" do
+      c = described_class.new([TestObjects::AssetTools::ReplaceCaps, TestObjects::AssetTools::ShortenString], [asset1, asset2], :external_assets => [asset3])
+      package = c.build!
+      package.content.should eq "ow -uick is -haq?\nuite doubled\nNot quick enough\n"
+    end
+
     it "uses post-build steps if specified" do
       c = described_class.new([TestObjects::AssetTools::ReplaceCaps], [asset1, asset3], :post_build => [TestObjects::AssetTools::ReplaceQs])
       package = c.build!

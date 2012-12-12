@@ -5,6 +5,11 @@ describe Keystone::Dsl::AssetExpression do
       :asset_path => asset_path) 
   }
 
+  it "can add assets from an external compiler" do
+    subject.add_assets_from TestObjects::Compilers::FakeCompiler.new
+    subject.config.external_compilers.should have_exactly(1).items
+  end
+
   context "when setting scan paths" do
     it "correctly sets the paths" do
       subject.scan "css", "js"

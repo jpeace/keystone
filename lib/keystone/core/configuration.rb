@@ -12,7 +12,7 @@ module Keystone
     def initialize(script='')
       @tool_modules = []
       @assets = []
-
+      
       dsl = Keystone::Dsl::PipelineExpression.new(self)
       dsl.instance_eval(script)
     end
@@ -27,14 +27,19 @@ module Keystone
   end
 
   class AssetConfiguration
-    attr_reader :name, :scan_paths, :tools, :post_build_steps, :post_build_ignore_patterns
+    attr_reader :name, :external_compilers, :scan_paths, :tools, :post_build_steps, :post_build_ignore_patterns
 
     def initialize(name)
       @name = name
+      @external_compilers = []
       @scan_paths = []
       @tools = []
       @post_build_steps = []
       @post_build_ignore_patterns = []
+    end
+
+    def add_external_compiler(compiler)
+      @external_compilers << compiler
     end
 
     def add_scan_path(path)

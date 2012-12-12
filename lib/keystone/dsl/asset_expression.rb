@@ -9,6 +9,10 @@ module Keystone
         @asset_path = settings[:asset_path] || ''
       end
 
+      def add_assets_from(compiler)
+        @config.add_external_compiler(compiler)
+      end
+
       def scan(*paths)
         paths.each do |path|
           raise Keystone::ConfigurationError.new("Bad scan path: #{path}") unless File.directory?("#{@asset_path}/#{path}")
