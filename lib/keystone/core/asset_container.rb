@@ -15,13 +15,9 @@ module Keystone
     end
 
     def asset(path_and_name)
-      path = ''
-      name = path_and_name
-      slash = path_and_name.rindex('/')
-      unless slash.nil?
-        path = path_and_name[0,slash]
-        name = path_and_name[slash+1..-1]
-      end
+      parsed = /^((?:\w+\/)*)(\w+)$/.match(path_and_name)
+      path = parsed[1].gsub(/\/$/,'')
+      name = parsed[2]
 
       return @assets.find{ |a| a.path == path && a.name == name }
     end

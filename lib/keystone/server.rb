@@ -51,6 +51,13 @@ module Keystone
           Keystone::Server.rebuild_hashes!(c)
           asset = c.asset(requested_path)
         end
+
+        if asset.nil?
+          parsed = /^((?:\w+\/)*)(\w+)$/.match(requested_path)
+          path = parsed[1].gsub(/\/$/,'')
+          name = parsed[2]
+          asset = c.external_assets.find{ |a| a.path == path && a.name == name }
+        end
       
         break unless asset.nil?
       end
@@ -75,12 +82,14 @@ module Keystone
             if ENV['RACK_ENV'] == 'development'
               Keystone::Server.safe_compile!(compiler)
               tags = []
-              compiler.assets.each do |a|
-                path = (a.path == '') ? a.name : "#{a.path}/#{a.name}"
-                unless base == ''
-                  path = "#{base}/#{path}"
+              [compiler.assets, compiler.external_assets].each do |assets|
+                assets.each do |a|
+                  path = (a.path == '') ? a.name : "#{a.path}/#{a.name}"
+                  unless base == ''
+                    path = "#{base}/#{path}"
+                  end
+                  tags << tag_for_asset(path, a.type)
                 end
-                tags << tag_for_asset(path, a.type)
               end
               tags.join("\n")
             else
