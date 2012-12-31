@@ -22,7 +22,15 @@ module Keystone
     end
 
     def package_type
-      @assets.first.type unless @assets.empty?
+      if @assets.empty?
+        if @external_assets.empty?
+          Keystone::Types::Unknown
+        else
+          @external_assets.first.type
+        end
+      else
+        @assets.first.type
+      end
     end
 
     def compiled?

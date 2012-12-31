@@ -90,6 +90,16 @@ describe Keystone::AssetCompiler do
       c.package_type.should eq :too_short
     end
 
+    it "chooses the type of the first external asset when determining package type if main assets are empty" do
+      c = described_class.new([],[], :external_assets => [asset1])
+      c.package_type.should eq :boring
+    end
+
+    it "returns unknown when determining package type if main assets and external assets are empty" do
+      c = described_class.new([],[])
+      c.package_type.should eq Keystone::Types::Unknown
+    end
+
     it "uses the package name given" do
       c = described_class.new([],[],:package_name => 'new_package')
       c.package_name.should eq 'new_package'
