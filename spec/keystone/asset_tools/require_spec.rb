@@ -5,6 +5,15 @@ describe Keystone::AssetTools::Require do
       alert(x+y);
     };
 }
+  
+  _tranformed_coffeescript = %{
+    (function() {
+      var x = 5;
+      var f = function(y) {
+        alert(x+y);
+      };
+    })();
+}
 
   _wrapped = %{
 (function() {
@@ -26,6 +35,30 @@ describe Keystone::AssetTools::Require do
   };
   window.modules = modules;
 })();}
+  
+  _wrapped_coffeescript = %{
+(function() {
+  var modules = window.modules || [];
+  var libCache = null;
+  var libFunc = function() {
+    
+    return (function() {
+      var x = 5;
+      var f = function(y) {
+        alert(x+y);
+      };
+    })();
+
+  };
+  modules.path__to__lib__lib = function() {
+    if (libCache === null) {
+      libCache = libFunc();
+    }
+    return libCache;
+  };
+  window.modules = modules;
+})();}
+
 
   _require_def = %{
 (function() {
@@ -51,6 +84,14 @@ describe Keystone::AssetTools::Require do
     a.content = _javascript
   end
 
+  _coffeescript_asset = Keystone::Asset.new do |a|
+    a.name = 'lib'
+    a.path = 'path/to/lib'
+    a.type = Keystone::Types::Javascript
+    a.type_history = [Keystone::Types::Coffeescript, Keystone::Types::Javascript]
+    a.content = _tranformed_coffeescript
+  end
+
   _unknown = Keystone::Asset.new do |a|
     a.name = 'unknown'
     a.type = Keystone::Types::Unknown
@@ -63,6 +104,10 @@ describe Keystone::AssetTools::Require do
 
   it "wraps javascript code into require modules" do
     subject.run([_asset]).first.content.should eq _wrapped
+  end
+
+  it "adds a return statement if the javascript has been tranformed from coffeescript" do
+    subject.run([_coffeescript_asset]).first.content.should eq _wrapped_coffeescript
   end
 
   it "adds an asset for the require definition" do

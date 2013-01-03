@@ -7,7 +7,7 @@ describe Keystone::AssetTools::Coffeescript do
   }
 
   _javascript = 
-%{return (function() {
+%{(function() {
   var C, c;
 
   C = (function() {

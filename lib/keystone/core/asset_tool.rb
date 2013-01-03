@@ -8,8 +8,10 @@ module Keystone
             new_type = new_content[0]
             new_content = new_content[1]
           end
+
           Asset.new do |a|
             a.name = asset.name
+            a.type_history = asset.type_history
             a.type = new_type || asset.type
             a.path = asset.path
             a.location_on_disk = asset.location_on_disk

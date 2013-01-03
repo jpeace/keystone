@@ -35,6 +35,9 @@ module Keystone
       end
 
       def transform(asset)
+        if asset.type_history.include?(Keystone::Types::Coffeescript)
+          asset.content.sub!(/^(\s+)?/, '\1return ')
+        end
         %{
 (function() {
   var modules = window.modules || [];

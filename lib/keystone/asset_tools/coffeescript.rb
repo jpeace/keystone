@@ -8,7 +8,7 @@ module Keystone
         asset.type == Keystone::Types::Coffeescript
       end
       def transform(asset)
-        [Keystone::Types::Javascript, "return #{CoffeeScript.compile(asset.content)}"]
+        [Keystone::Types::Javascript, CoffeeScript.compile(asset.content)]
       end
     end
   end

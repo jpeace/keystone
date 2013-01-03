@@ -30,5 +30,12 @@ describe "classes mixing in the AssetTool module" do
       asset.type.should eq :doubled
       asset.content.should eq 'QQuuiittee  ddoouubblleedd'
     end
+
+    it "preserves asset type history" do
+      asset = double_string.run([asset2]).first
+      asset.type_history.should have_exactly(2).items
+      asset.type_history.should include(:too_short)
+      asset.type_history.should include(:doubled)
+    end
   end
 end
