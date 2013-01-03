@@ -13,7 +13,9 @@ module Keystone
         assets.each do |asset|
           if asset.name[0] == '_'
             modules << asset
-            Keystone::Sass::InMemoryImporter.add_module("#{asset.path}/#{asset.name[1..-1]}", asset.content)
+            module_name = asset.name[1..-1]
+            full_path = asset.path.empty? ? module_name : "#{asset.path}/#{module_name}"
+            Keystone::Sass::InMemoryImporter.add_module(full_path, asset.content)
           else
             templates << asset
           end
