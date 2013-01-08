@@ -15,7 +15,7 @@ module Keystone
     end
 
     def asset(path_and_name)
-      parsed = /^((?:\w+\/)*)(\w+)$/.match(path_and_name)
+      parsed = /^((?:\w+\/)*)(\w+)(\.\w+)?$/.match(path_and_name)
       path = parsed[1].gsub(/\/$/,'')
       name = parsed[2]
 
