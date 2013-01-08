@@ -41,12 +41,16 @@ module Keystone
       return [404, 'Not Found'] if @@pipeline.nil?
       
       requested_path = params[:splat].first[1..-1]
+      requested_filename = requested_path.split('/').last
+      requested_type = AssetLoader.type_from_filename(requested_filename)
       asset = nil
 
       @@pipeline.compilers.each do |c|
         Keystone::Server.safe_compile!(c)
         
         asset = c.asset(requested_path)
+        continue unless asset.type == requested_type
+        
         if !asset.nil? && (asset.current_hash != @@asset_hashes[requested_path])
           Keystone::Server.rebuild_hashes!(c)
           asset = c.asset(requested_path)
@@ -100,11 +104,12 @@ module Keystone
           end
 
           def tag_for_asset(name, type)
+            extension = AssetLoader.extension_from_type(type)
             case
               when [Keystone::Types::Javascript, Keystone::Types::Coffeescript].include?(type)
-                %{<script type="text/javascript" src="#{name}"></script>}
+                %{<script type="text/javascript" src="#{name}#{extension}"></script>}
               when [Keystone::Types::Css, Keystone::Types::Sassy].include?(type)
-                %{<link rel="stylesheet" type="text/css" href="#{name}" />}
+                %{<link rel="stylesheet" type="text/css" href="#{name}#{extension}" />}
               else
                 ""
             end

@@ -3,14 +3,16 @@ module Keystone
     include AssetContainer
 
     class << self
-      def type_from_filename(filename)
-        extensions = {
+      def extensions
+        {
           Types::Coffeescript => ['coffee'],
           Types::Javascript => ['js'],
           Types::Sassy => ['scss'],
           Types::Css => ['css']
         }
+      end
 
+      def type_from_filename(filename)
         ext = filename.split('.').last
         found = extensions.select {|type, exts| exts.include? ext}.first
         if found.nil?
@@ -18,6 +20,11 @@ module Keystone
         else
           found[0]
         end
+      end
+
+      def extension_from_type(type)
+        ext_array = extensions[type]
+        ext_array.nil? ? '' : ".#{ext_array.first}"
       end
 
       def name_from_filename(filename)

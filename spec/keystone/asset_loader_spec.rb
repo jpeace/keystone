@@ -27,6 +27,28 @@ describe Keystone::AssetLoader do
     end
   end
 
+  context "when determining extension from content type" do
+    it "handles coffeescript files" do
+      _cut.extension_from_type(Keystone::Types::Coffeescript).should eq '.coffee'
+    end
+
+    it "handles javascript files" do
+      _cut.extension_from_type(Keystone::Types::Javascript).should eq '.js'
+    end
+
+    it "handles sassy css files" do
+      _cut.extension_from_type(Keystone::Types::Sassy).should eq '.scss'
+    end
+
+    it "handles css files" do
+      _cut.extension_from_type(Keystone::Types::Css).should eq '.css'
+    end
+
+    it "defaults to nothing" do
+      _cut.extension_from_type(Keystone::Types::Unknown).should eq ''
+    end
+  end
+
   context "when determining names from files" do
     it "ignores the extension" do
       _cut.name_from_filename('script.js').should eq 'script'
