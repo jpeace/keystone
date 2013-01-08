@@ -49,8 +49,8 @@ module Keystone
         Keystone::Server.safe_compile!(c)
         
         asset = c.asset(requested_path)
-        continue unless asset.type == requested_type
-        
+        next unless asset.type == requested_type
+
         if !asset.nil? && (asset.current_hash != @@asset_hashes[requested_path])
           Keystone::Server.rebuild_hashes!(c)
           asset = c.asset(requested_path)
