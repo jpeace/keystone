@@ -107,9 +107,9 @@ module Keystone
             extension = AssetLoader.extension_from_type(type)
             case
               when [Keystone::Types::Javascript, Keystone::Types::Coffeescript].include?(type)
-                %{<script type="text/javascript" src="#{name}#{extension}"></script>}
+                %{<script type="text/javascript" src="/#{name}#{extension}"></script>}
               when [Keystone::Types::Css, Keystone::Types::Sassy].include?(type)
-                %{<link rel="stylesheet" type="text/css" href="#{name}#{extension}" />}
+                %{<link rel="stylesheet" type="text/css" href="/#{name}#{extension}" />}
               else
                 ""
             end
