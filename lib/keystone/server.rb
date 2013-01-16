@@ -67,7 +67,7 @@ module Keystone
           name = parsed[2]
           extension = parsed[4]
 
-          results = @assets.select{ |a| a.path == path && a.name == name }
+          results = c.external_assets.select{ |a| a.path == path && a.name == name }
           if extension.nil?
             asset = results.first
           else
