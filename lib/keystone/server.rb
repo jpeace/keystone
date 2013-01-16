@@ -92,7 +92,7 @@ module Keystone
                   unless base == ''
                     path = "#{base}/#{path}"
                   end
-                  tags << tag_for_asset(path, a.type)
+                  tags << tag_for_asset(path, a.type, :add_extension => true)
                 end
               end
               tags.join("\n")
@@ -103,13 +103,14 @@ module Keystone
             end
           end
 
-          def tag_for_asset(name, type)
-            extension = AssetLoader.extension_from_type(type)
+          def tag_for_asset(name, type, options={})
+            add_extension = options[:add_extension] || false
+            path = add_extension ? "#{name}#{AssetLoader.extension_from_type(type)}" : name
             case
               when [Keystone::Types::Javascript, Keystone::Types::Coffeescript].include?(type)
-                %{<script type="text/javascript" src="/#{name}#{extension}"></script>}
+                %{<script type="text/javascript" src="/#{path}"></script>}
               when [Keystone::Types::Css, Keystone::Types::Sassy].include?(type)
-                %{<link rel="stylesheet" type="text/css" href="/#{name}#{extension}" />}
+                %{<link rel="stylesheet" type="text/css" href="/#{path}" />}
               else
                 ""
             end
