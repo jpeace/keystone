@@ -49,18 +49,30 @@ module Keystone
         Keystone::Server.safe_compile!(c)
         
         asset = c.asset(requested_path)
-        next unless asset.type == requested_type
+        unless asset.nil?
+          asset = nil unless asset.type == requested_type
+        end
 
         if !asset.nil? && (asset.current_hash != @@asset_hashes[requested_path])
           Keystone::Server.rebuild_hashes!(c)
           asset = c.asset(requested_path)
+          unless asset.nil?
+            asset = nil unless asset.type == requested_type
+          end
         end
 
         if asset.nil?
-          parsed = /^((?:\w+\/)*)(\w+)$/.match(requested_path)
+          parsed = /^((?:\w+\/)*)(\w+)(\.(\w+))?$/.match(requested_path)
           path = parsed[1].gsub(/\/$/,'')
           name = parsed[2]
-          asset = c.external_assets.find{ |a| a.path == path && a.name == name }
+          extension = parsed[4]
+
+          results = @assets.select{ |a| a.path == path && a.name == name }
+          if extension.nil?
+            asset = results.first
+          else
+            asset = results.find{ |a| a.type == Keystone::AssetLoader.type_from_extension(extension) }
+          end
         end
       
         break unless asset.nil?

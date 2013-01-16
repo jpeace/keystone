@@ -15,11 +15,17 @@ module Keystone
     end
 
     def asset(path_and_name)
-      parsed = /^((?:\w+\/)*)(\w+)(\.\w+)?$/.match(path_and_name)
+      parsed = /^((?:\w+\/)*)(\w+)(\.(\w+))?$/.match(path_and_name)
       path = parsed[1].gsub(/\/$/,'')
       name = parsed[2]
+      extension = parsed[4]
 
-      return @assets.find{ |a| a.path == path && a.name == name }
+      results = @assets.select{ |a| a.path == path && a.name == name }
+      if extension.nil?
+        return results.first
+      else
+        return results.find{ |a| a.type == Keystone::AssetLoader.type_from_extension(extension)}
+      end
     end
   end
 end

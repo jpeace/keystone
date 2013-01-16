@@ -12,14 +12,17 @@ module Keystone
         }
       end
 
-      def type_from_filename(filename)
-        ext = filename.split('.').last
-        found = extensions.select {|type, exts| exts.include? ext}.first
+      def type_from_extension(extension)
+        found = extensions.select {|type, exts| exts.include? extension}.first
         if found.nil?
           Types::Unknown
         else
           found[0]
         end
+      end
+
+      def type_from_filename(filename)
+        type_from_extension(filename.split('.').last)
       end
 
       def extension_from_type(type)
