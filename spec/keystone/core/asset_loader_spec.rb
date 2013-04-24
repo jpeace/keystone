@@ -1,7 +1,7 @@
 describe Keystone::AssetLoader do
   
   _cut = described_class
-  subject { described_class.new("#{File.dirname(__FILE__)}/../environment/assets") }
+  subject { described_class.new("#{File.dirname(__FILE__)}/../../environment/assets") }
 
   context "when determining content types from files" do
     it "recognizes coffeescript files" do
@@ -89,7 +89,7 @@ describe Keystone::AssetLoader do
       readme_file.name.should eq 'readme'
       readme_file.path.should eq ''
       readme_file.content.should eq 'Read Me!!!'
-      readme_file.location_on_disk.should eq File.expand_path("#{File.dirname(__FILE__)}/../environment/assets/css/readme.txt")
+      readme_file.location_on_disk.should eq File.expand_path("#{File.dirname(__FILE__)}/../../environment/assets/css/readme.txt")
     end
 
     it "scans subfolders" do

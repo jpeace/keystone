@@ -1,6 +1,6 @@
 describe Keystone::PipelineConfiguration do
   it "can be initialized through a configuration script" do
-	 config = described_class.from_file("#{File.dirname(__FILE__)}/../environment/assets.rb")
+	 config = described_class.from_file("#{File.dirname(__FILE__)}/../../environment/assets.rb")
 
 	 config.asset_path.should eq ENV['ASSET_PATH']
 	 config.tool_modules.should include TestObjects::AssetTools
@@ -23,7 +23,7 @@ describe Keystone::PipelineConfiguration do
   end
 
   it "can be used to build a pipeline" do
-  	config = described_class.from_file("#{File.dirname(__FILE__)}/../environment/assets.rb")
+  	config = described_class.from_file("#{File.dirname(__FILE__)}/../../environment/assets.rb")
   	pipeline = Keystone.build_pipeline(config)
 
   	pipeline.compilers.should have_exactly(2).items
@@ -42,7 +42,7 @@ describe Keystone::PipelineConfiguration do
 
   context "when adding assets from an external compiler" do
   	it "correctly brings in the additional assets" do
-  		config = described_class.from_file("#{File.dirname(__FILE__)}/../environment/assets.rb")
+  		config = described_class.from_file("#{File.dirname(__FILE__)}/../../environment/assets.rb")
       config.assets.find {|a| a.name == 'keystone.js'}.add_external_compiler(TestObjects::Compilers::FakeCompiler.new)
       pipeline = Keystone.build_pipeline(config)
 
@@ -50,7 +50,7 @@ describe Keystone::PipelineConfiguration do
   	end
 
     it "compiles the external assets before adding them" do
-      config = described_class.from_file("#{File.dirname(__FILE__)}/../environment/assets.rb")
+      config = described_class.from_file("#{File.dirname(__FILE__)}/../../environment/assets.rb")
       config.assets.find {|a| a.name == 'keystone.js'}.add_external_compiler(TestObjects::Compilers::FakeCompiler.new)
       pipeline = Keystone.build_pipeline(config)
 
