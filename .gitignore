@@ -2,3 +2,4 @@
 vendor
 .sass-cache
 pkg
+.DS_Store
