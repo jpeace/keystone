@@ -62,7 +62,8 @@ module Keystone
       if @package.nil?
         compile!
 
-        combined_assets = @assets + @external_assets
+        combined_assets = clean_duplicated_assets(@assets + @external_assets)
+
         non_pb_assets, pb_assets = combined_assets.partition {|a| @post_build_ignore_patterns.any? {|re| re.match(a.name)}}
         non_pb_package, pb_package = [non_pb_assets, pb_assets].map do |assets|
           Asset.new do |a|
@@ -81,5 +82,18 @@ module Keystone
       end
       @package
     end
+
+    private 
+
+    def clean_duplicated_assets(assets)
+      unique_assets = [ ]
+
+      assets.each do |asset|
+        unique_assets << asset unless unique_assets.select {|test_asset| test_asset.content == asset.content}.length > 0
+      end
+
+      unique_assets
+    end
+
   end
 end
