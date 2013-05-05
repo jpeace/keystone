@@ -119,6 +119,12 @@ describe Keystone::AssetCompiler do
       package.content.should eq "ow -uick is -haq?\nuite doubled\n"
     end
 
+    it "will not include a duplicated asset more than once" do
+      c = described_class.new([], [asset1, asset2], :external_assets => [ asset1 ])
+      package = c.build!
+      package.content.should eq "How Quick is Shaq?\nQuite doubled\n"
+    end
+
     it "includes external assets" do
       c = described_class.new([TestObjects::AssetTools::ReplaceCaps, TestObjects::AssetTools::ShortenString], [asset1, asset2], :external_assets => [asset3])
       package = c.build!
