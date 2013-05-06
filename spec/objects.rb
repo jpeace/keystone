@@ -93,7 +93,7 @@ module TestObjects
     class FakeCompiler < Keystone::AssetCompiler
       include TestObjects::Assets
       def initialize
-        @assets = [asset1, asset2]
+        @originals = @assets = [asset1, asset2]
         @toolchain = [TestObjects::AssetTools::DoubleString.new]
         @package_name = 'fake_package'
         @post_build = []

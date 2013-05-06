@@ -2,11 +2,16 @@ require 'digest/md5'
 
 module Keystone
   class Asset
-    attr_accessor :name, :path, :type, :type_history, :content, :location_on_disk
+    attr_accessor :name, :path, :type, :type_history, :content, :location_on_disk, :namespace
     def initialize
       @path = ''
+      @namespace = nil
       @type_history = []
       yield self if block_given?
+    end
+
+    def namespace
+      @namespace.nil? ? @path : @namespace
     end
 
     def type=(val)

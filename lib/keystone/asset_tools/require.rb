@@ -45,7 +45,7 @@ module Keystone
   var #{asset.name}Func = function() {
     #{asset.content}
   };
-  modules.#{asset.path.gsub(/\//, '__')}__#{asset.name} = function() {
+  modules.#{asset.namespace.gsub(/\//, '__')}__#{asset.name} = function() {
     if (#{asset.name}Cache === null) {
       #{asset.name}Cache = #{asset.name}Func();
     }

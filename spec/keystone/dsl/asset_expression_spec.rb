@@ -14,8 +14,8 @@ describe Keystone::Dsl::AssetExpression do
     it "correctly sets the paths" do
       subject.scan "css", "js"
       
-      subject.config.scan_paths.should include "css"
-      subject.config.scan_paths.should include "js"
+      subject.config.scan_paths.map {|scan_path| scan_path.path}.should include "css"
+      subject.config.scan_paths.map {|scan_path| scan_path.path}.should include "js"
     end
 
     it "throws an exception if any of the paths do not exist" do

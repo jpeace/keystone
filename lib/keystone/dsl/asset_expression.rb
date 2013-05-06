@@ -15,8 +15,14 @@ module Keystone
 
       def scan(*paths)
         paths.each do |path|
-          raise Keystone::ConfigurationError.new("Bad scan path: #{path}") unless File.directory?("#{@asset_path}/#{path}")
-          @config.add_scan_path(path)
+          scan_path = nil
+          if path.is_a? Hash 
+            scan_path = Keystone::ScanPath.new(path[:path], path[:namespace])
+          else
+            scan_path = Keystone::ScanPath.new(path)
+          end
+          raise Keystone::ConfigurationError.new("Bad scan path: #{scan_path.path}") unless File.directory?("#{@asset_path}/#{scan_path.path}")
+          @config.add_scan_path(scan_path)
         end
       end
 

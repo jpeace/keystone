@@ -6,6 +6,7 @@ gem 'sass'
 gem 'sinatra'
 
 group :development do
+	gem 'capybara'
   gem 'rake'
   gem 'rspec'
   gem 'debugger'
