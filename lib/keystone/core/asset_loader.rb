@@ -56,8 +56,8 @@ module Keystone
 
         file_path = "#{full_path}/#{file}"
         if File.directory?(file_path)
-          namespace = namespace.nil? ? nil : "#{namespace}/#{file}"
-          scan_folder("#{folder}/#{file}", root_folder, namespace)
+          new_namespace = namespace.nil? ? nil : "#{namespace}/#{file}"
+          scan_folder("#{folder}/#{file}", root_folder, new_namespace)
         else
           filename = file_path[(file_path.rindex('/')+1)..-1]
           @assets << Asset.new do |a|
