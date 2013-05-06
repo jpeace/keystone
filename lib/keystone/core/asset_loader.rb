@@ -56,13 +56,14 @@ module Keystone
 
         file_path = "#{full_path}/#{file}"
         if File.directory?(file_path)
-          scan_folder("#{folder}/#{file}", root_folder, "#{namespace}/#{file}")
+          namespace = namespace.nil? ? nil : "#{namespace}/#{file}"
+          scan_folder("#{folder}/#{file}", root_folder, namespace)
         else
           filename = file_path[(file_path.rindex('/')+1)..-1]
           @assets << Asset.new do |a|
             a.name = AssetLoader.name_from_filename(filename)
-            a.namespace = namespace
             a.path = folder.gsub(/^#{root_folder}(\/)?/, '')
+            a.namespace = namespace
             a.type = AssetLoader.type_from_filename(filename)
             a.content = File.read(file_path)
             a.location_on_disk = File.expand_path(file_path)
