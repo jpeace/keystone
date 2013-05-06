@@ -15,7 +15,7 @@ module Keystone
       config.assets.each do |asset_config|
         loader = AssetLoader.new(config.asset_path)
         asset_config.scan_paths.each do |scan_path|
-          loader.scan!(scan_path.path)
+          loader.scan!(scan_path)
         end
 
         external_assets = []

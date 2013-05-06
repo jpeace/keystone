@@ -60,29 +60,32 @@ describe Keystone::AssetLoader do
   end
 
   context "when scanning folders" do
+    css_scan_path = Keystone::ScanPath.new('css')
+    js_scan_path = Keystone::ScanPath.new('js')
+
     it "finds all assets" do
-      subject.scan!('css')
+      subject.scan!(css_scan_path)
       subject.assets.should have_exactly(3).items
     end
 
     it "can pull assets by type" do
-      subject.scan!('css')
+      subject.scan!(css_scan_path)
       subject.assets(:css).should have_exactly(2).items
       subject.assets(:unknown).should have_exactly(1).items
     end
 
     it "can pull assets by name" do
-      subject.scan!('css')
+      subject.scan!(css_scan_path)
       subject.assets('style1').first.should be_instance_of Keystone::Asset
     end
 
     it "can pull a single asset by name and path" do
-      subject.scan!('js')
+      subject.scan!(js_scan_path)
       subject.asset('lib1/js2').should be_instance_of Keystone::Asset
     end
 
     it "correctly reads assets" do
-      subject.scan!('css')
+      subject.scan!(css_scan_path)
 
       readme_file = subject.asset('readme')
       readme_file.should be_instance_of Keystone::Asset
@@ -93,7 +96,7 @@ describe Keystone::AssetLoader do
     end
 
     it "scans subfolders" do
-      subject.scan!('js')
+      subject.scan!(js_scan_path)
 
       subject.assets.should have_exactly(4).items
       
@@ -114,14 +117,14 @@ describe Keystone::AssetLoader do
     end
 
     it "scans multiple folders" do
-      subject.scan!('css')
-      subject.scan!('js')
+      subject.scan!(css_scan_path)
+      subject.scan!(js_scan_path)
 
       subject.assets.should have_exactly(7).items
     end
 
     it "correctly builds paths with a subfolder as root" do
-      subject.scan!('js/lib1')
+      subject.scan!(Keystone::ScanPath.new('js/lib1'))
 
       subject.assets.should have_exactly(3).items
       
@@ -133,8 +136,33 @@ describe Keystone::AssetLoader do
     end
 
     it "ignores dot files" do
-      subject.scan!('dotfiles')
+      subject.scan!(Keystone::ScanPath.new('dotfiles'))
       subject.assets.should have_exactly(1).items
+    end
+
+    it "sets the namespace of assets appropriately" do
+      subject.scan!(Keystone::ScanPath.new('js', 'topnamespace'))
+
+      subject.assets.should have_exactly(4).items
+      
+      js1 = subject.asset('js1')
+      js1.namespace.should eq 'topnamespace'
+
+      js2 = subject.asset('lib1/js2')
+      js2.namespace.should eq 'topnamespace/lib1'
+
+      support = subject.asset('lib1/support/support')
+      support.namespace.should eq 'topnamespace/lib1/support'
+    end
+
+    it "will append subfolders to the namespace" do
+      subject.scan!(Keystone::ScanPath.new('js', 'topnamespace'))
+
+      js2 = subject.asset('lib1/js2')
+      js2.namespace.should eq 'topnamespace/lib1'
+
+      support = subject.asset('lib1/support/support')
+      support.namespace.should eq 'topnamespace/lib1/support'
     end
   end
 end
