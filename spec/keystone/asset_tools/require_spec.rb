@@ -79,14 +79,14 @@ describe Keystone::AssetTools::Require do
 
   _asset = Keystone::Asset.new do |a|
     a.name = 'lib'
-    a.path = 'path/to/lib'
+    a.namespace = 'path/to/lib'
     a.type = Keystone::Types::Javascript
     a.content = _javascript
   end
 
   _coffeescript_asset = Keystone::Asset.new do |a|
     a.name = 'lib'
-    a.path = 'path/to/lib'
+    a.namespace = 'path/to/lib'
     a.type = Keystone::Types::Javascript
     a.type_history = [Keystone::Types::Coffeescript, Keystone::Types::Javascript]
     a.content = _tranformed_coffeescript
