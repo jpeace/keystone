@@ -14,6 +14,7 @@ module Keystone
             a.type_history = asset.type_history
             a.type = new_type || asset.type
             a.path = asset.path
+            a.namespace = asset.namespace
             a.location_on_disk = asset.location_on_disk
             a.content = new_content
           end
