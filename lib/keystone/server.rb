@@ -10,36 +10,35 @@ module Keystone
     @@mime_types[Keystone::Types::Css] = 'text/css'
 
     class << self
-      attr_accessor :pipeline
+
+      def pipeline
+        @@pipeline
+      end
+
+      def pipeline=(pipeline)
+        @@pipeline = pipeline
+      end
+
     end
 
     get '*' do
-      return [404, 'Not Found'] if @@pipeline.nil?
-      
-      @@pipeline.compilers.each do |compiler|
-        safe_compile! compiler
-        
-        asset = find_asset_in_compiler compiler
+      return [404, 'Pipeline Not Found'] if @@pipeline.nil?
+      return [404, 'Compiler Not Found'] if parent_asset_compiler.nil?
 
-        unless asset.nil?
-          content_type @@mime_types[asset.type], :charset => 'utf-8'
-          return [200, asset.content]
-        end
+      safe_compile! parent_asset_compiler
+
+      asset = find_asset_in_compiler parent_asset_compiler
+
+      unless asset.nil?
+        content_type @@mime_types[asset.type], charset: 'utf-8'
+        return [200, asset.content]
       end
 
-      [404, 'Not Found']
+      [404, 'Asset Not Found']
     end
 
+    # included to be used in Sinatra templates
     module Helpers
-      
-      # Forces a reload from disk if compilation fails
-      def safe_compile!(compiler)
-        begin
-          compiler.compile!
-        rescue
-          recompile_assets!(compiler)
-        end
-      end 
 
       def self.included(mod)
         mod.helpers do
@@ -58,7 +57,7 @@ module Keystone
                   unless base == ''
                     path = "#{base}/#{path}"
                   end
-                  tags << tag_for_asset(path, a.type, :add_extension => true)
+                  tags << tag_for_asset(path, a.type, add_extension: true, asset_parent: asset_name)
                 end
               end
               tags.join("\n")
@@ -68,21 +67,46 @@ module Keystone
               tag_for_asset(path, compiler.package_type)
             end
           end
-
-          def tag_for_asset(name, type, options={})
-            add_extension = options[:add_extension] || false
-            path = add_extension ? "#{name}#{AssetLoader.extension_from_type(type)}" : name
-            case
-              when [Keystone::Types::Javascript, Keystone::Types::Coffeescript].include?(type)
-                %{<script type="text/javascript" src="/#{path}"></script>}
-              when [Keystone::Types::Css, Keystone::Types::Sassy].include?(type)
-                %{<link rel="stylesheet" type="text/css" href="/#{path}" />}
-              else
-                ""
-            end
-          end
         end
       end
+
+      private
+
+      def tag_for_asset(name, type, options={})
+        extension = options[:add_extension] ? AssetLoader.extension_from_type(type) : ''
+        query_string = options[:asset_parent].nil? ? '' : "?asset_parent=#{options[:asset_parent]}"
+
+        path = "#{name}#{extension}#{query_string}"
+        
+        case
+          when [Keystone::Types::Javascript, Keystone::Types::Coffeescript].include?(type)
+            %{<script type="text/javascript" src="/#{path}"></script>}
+          when [Keystone::Types::Css, Keystone::Types::Sassy].include?(type)
+            %{<link rel="stylesheet" type="text/css" href="/#{path}" />}
+          else
+            ""
+        end
+      end
+      
+      # Forces a reload from disk if compilation fails
+      def safe_compile!(compiler)
+        begin
+          compiler.compile!
+        rescue
+          recompile_assets!(compiler)
+        end
+      end 
+
+      # Reloads files from disk and recalculates MD5 hashes
+      def recompile_assets!(compiler)
+        compiler.reset!
+        compiler.compile!
+        compiler.assets.each do |a|
+          path_and_name = a.path == '' ? a.name : "#{a.path}/#{a.name}"
+          @@asset_hashes[path_and_name] = a.current_hash
+        end
+      end 
+
     end
 
 
@@ -98,6 +122,10 @@ module Keystone
 
     def requested_type
       @requested_type ||= AssetLoader.type_from_filename(requested_filename)
+    end
+
+    def parent_asset_compiler
+      @parent_asset_compiler ||= @@pipeline.compiler params[:asset_parent]
     end
       
     # Forces a reload from disk if compilation fails
@@ -123,7 +151,7 @@ module Keystone
       asset = compiler.asset(requested_path)
 
       if asset.nil?
-        asset = find_asset_in_externals
+        asset = find_asset_in_externals compiler
       elsif asset.type == requested_type
         if need_to_rebuild_asset? asset
           recompile_assets! compiler
@@ -134,7 +162,7 @@ module Keystone
       asset
     end
 
-    def find_asset_in_externals
+    def find_asset_in_externals compiler
       parsed = /^((?:\w+\/)*)(\w+)(\.(\w+))?$/.match(requested_path)
       path = parsed[1].gsub(/\/$/,'')
       name = parsed[2]
