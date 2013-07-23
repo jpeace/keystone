@@ -1,5 +1,5 @@
 require 'keystone/version'
-%w(core dsl asset_tools server rake_task).each do |dep|
+%w(core dsl asset_tools server rake_task sinatra).each do |dep|
   require "keystone/#{dep}"
 end
 
